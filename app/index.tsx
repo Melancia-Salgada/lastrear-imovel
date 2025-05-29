@@ -5,8 +5,8 @@ import { useContext } from "react";
 import { UserContext } from "@/src/context/UserContext";
 
 export default function Index() {
-  const { user, setUser } = useContext(UserContext);
 
+  const { user, setUser } = useContext(UserContext);
 
   return (
     <>
