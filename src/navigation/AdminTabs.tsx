@@ -1,13 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import Home from "../pages/Home"
-import { AiFillHome } from "react-icons/ai";
-import { BsPersonLinesFill } from "react-icons/bs";
-import { FaUserGroup } from "react-icons/fa6";
-import { FaGear } from "react-icons/fa6";
+import Home from "../screens/Admin/Home"
+import { FontAwesome6, Ionicons } from '@expo/vector-icons'; 
 
 const Tab = createBottomTabNavigator()
 
-export default function Tabs() {
+export default function AdminTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -18,8 +15,8 @@ export default function Tabs() {
           height: 92,
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)'
         },
-        tabBarLabelStyle: {
-          fontSize: 8,  
+        tabBarIconStyle: {
+          paddingBottom: 0, 
         },
       }}
     >
@@ -28,7 +25,7 @@ export default function Tabs() {
         component={Home}
         options={{
           tabBarIcon: ({ color }) => (
-            <AiFillHome size={40} color={color}/>
+            <Ionicons name="home" size={32} color={color}/>
           ),
           tabBarLabel: () => null,
         }}
@@ -39,7 +36,7 @@ export default function Tabs() {
         component={Home}
         options={{
           tabBarIcon: ({ color }) => (
-            <BsPersonLinesFill size={40} color={color}/>
+            <FontAwesome6 name='address-card' size={28} color={color}/>
           ),
           tabBarLabel: () => null,
         }}
@@ -49,7 +46,7 @@ export default function Tabs() {
         component={Home}
         options={{
           tabBarIcon: ({ color }) => (
-            <FaUserGroup  size={28} color={color}/>
+            <FontAwesome6 name="user-group" size={24} color={color} />
           ),
           tabBarLabel: () => null,
         }}
@@ -59,7 +56,7 @@ export default function Tabs() {
         component={Home}
         options={{
           tabBarIcon: ({ color }) => (
-            <FaGear  size={40} color={color}/>
+            <FontAwesome6 name="gear" size={26} color={color} />
           ),tabBarLabel: () => null,
         }}
       />

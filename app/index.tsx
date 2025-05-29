@@ -1,9 +1,17 @@
-import Tabs from "@/src/navigation/tabs";
-import { NavigationContainer } from "@react-navigation/native";
+
+import AdminTabs from "@/src/navigation/AdminTabs";
+import CorretorTabs from "@/src/navigation/CorretorTabs";
+import { useState } from "react";
 
 
 export default function Index() {
+  const [user, setUser] = useState('corretor')
+
+
   return (
-    <Tabs/>
+    <>
+      {user === 'admin' && <AdminTabs/>}
+      {user === 'corretor' && <CorretorTabs/>}
+    </>
   );
 }
