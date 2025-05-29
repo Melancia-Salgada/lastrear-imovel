@@ -1,11 +1,11 @@
 
 import AdminTabs from "@/src/navigation/AdminTabs";
 import CorretorTabs from "@/src/navigation/CorretorTabs";
-import { useState } from "react";
-
+import { useContext } from "react";
+import { UserContext } from "@/src/context/UserContext";
 
 export default function Index() {
-  const [user, setUser] = useState('corretor')
+  const { user, setUser } = useContext(UserContext);
 
 
   return (

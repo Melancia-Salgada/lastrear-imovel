@@ -1,10 +1,13 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import Home from "../screens/Admin/Home"
-import { FontAwesome6, Ionicons } from '@expo/vector-icons'; 
+import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Home from "../screens/Home";
+import Clientes from '../screens/Clientes';
+import Ajustes from '../screens/Ajustes';
+import Corretores from '../screens/Corretores';
 
 const Tab = createBottomTabNavigator()
 
-export default function CorretorTabs() {
+export default function AdminTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -33,7 +36,7 @@ export default function CorretorTabs() {
       />
       <Tab.Screen
         name="Clientes"
-        component={Home}
+        component={Clientes}
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name='address-card' size={28} color={color}/>
@@ -43,7 +46,7 @@ export default function CorretorTabs() {
       />
       <Tab.Screen
         name="Ajustes"
-        component={Home}
+        component={Ajustes}
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name="gear" size={26} color={color} />

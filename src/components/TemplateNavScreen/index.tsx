@@ -43,10 +43,10 @@ const styles = StyleSheet.create ({
     fontSize: 36,
     fontFamily: 'Poppins_600SemiBold', 
     color: '#fff',
-    marginBottom: -8
   },
   sublabel: {
-    color: '#fff'
+    color: '#fff',
+    marginTop: -8
   },
   titleContainer: {
     marginLeft: 12,
