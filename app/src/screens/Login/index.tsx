@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subtitulo:{
-    paddingBottom:50,
+    paddingBottom:20,
   },
   label:{
     fontWeight: 'bold',
@@ -118,11 +118,11 @@ const styles = StyleSheet.create({
     marginBottom: windowHeight * 0.05,
   },
   button: {
-    backgroundColor: '#0D559F', // Cor azul do botão (use a cor exata se tiver)
+    backgroundColor: '#0D559F', 
     paddingVertical: 15,
     paddingHorizontal: 50,
-    borderRadius: 25, // Bordas arredondadas
-    marginBottom: 10, // Espaço entre o botão e o texto
+    borderRadius: 25, 
+    marginBottom: 10, 
     alignItems: 'center',
     justifyContent:'center'
   },
@@ -132,16 +132,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   forgotPasswordContainer: {
-    flexDirection: 'row', // Coloca o texto e o link na mesma linha
+    flexDirection: 'row', 
     justifyContent:'center'
   },
   forgotPasswordText: {
     fontSize: 16,
-    color: '#333', // Cor do texto "Esqueceu a senha?"
+    color: '#333', 
   },
   recoverPasswordText: {
     fontSize: 16,
-    color: '#0D559F', // Cor do link "Recuperar"
+    color: '#0D559F', 
     fontWeight: 'bold',
   }
 });
