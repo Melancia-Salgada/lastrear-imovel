@@ -1,8 +1,8 @@
 
-import AdminTabs from "@/src/navigation/AdminTabs";
-import CorretorTabs from "@/src/navigation/CorretorTabs";
+import AdminTabs from "@/app/src/navigation/AdminTabs";
+import CorretorTabs from "@/app/src/navigation/CorretorTabs";
+import { UserContext } from "./src/context/UserContext";
 import { useContext } from "react";
-import { UserContext } from "@/src/context/UserContext";
 
 export default function Index() {
 

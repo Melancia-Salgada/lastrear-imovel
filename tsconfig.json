@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "src/context/UserContext.jsx"  ]
+, "app/src/context/UserContext.jsx"  ]
 }

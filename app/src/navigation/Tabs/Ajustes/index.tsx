@@ -1,6 +1,6 @@
-import React from 'react'
+import TemplateNavScreen from '@/app/src/components/TemplateNavScreen'
 import { Text } from '@react-navigation/elements'
-import TemplateNavScreen from '@/src/components/TemplateNavScreen'
+import React from 'react'
 
 function Ajustes() {
   return (

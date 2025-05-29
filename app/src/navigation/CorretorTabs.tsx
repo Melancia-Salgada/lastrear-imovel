@@ -1,9 +1,8 @@
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../screens/Home";
-import Clientes from '../screens/Clientes';
-import Ajustes from '../screens/Ajustes';
-import Corretores from '../screens/Corretores';
+import Ajustes from './Tabs/Ajustes';
+import Clientes from './Tabs/Clientes';
+import Home from "./Tabs/Home";
 
 const Tab = createBottomTabNavigator()
 
@@ -40,16 +39,6 @@ export default function AdminTabs() {
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name='address-card' size={28} color={color}/>
-          ),
-          tabBarLabel: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Corretores"
-        component={Corretores}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="user-group" size={24} color={color} />
           ),
           tabBarLabel: () => null,
         }}
