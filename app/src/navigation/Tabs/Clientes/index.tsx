@@ -1,12 +1,19 @@
-import Input from '@/app/src/components/Input'
 import TemplateNavScreen from '@/app/src/components/TemplateNavScreen'
-import { Text } from '@react-navigation/elements'
 import React from 'react'
+import HeaderSearch from '@/app/src/components/HeaderSearch'
 
 function Clientes() {
+
+  function handleClickFiltro() {
+
+  }
+
   return (
     <TemplateNavScreen label='Clientes'>
-      <Input placeholder='Buscar' type='search'/>
+
+      
+      <HeaderSearch handleClickFiltro={handleClickFiltro}/>
+      
     </TemplateNavScreen>
   )
 }

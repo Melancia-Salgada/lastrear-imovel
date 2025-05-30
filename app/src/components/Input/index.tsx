@@ -33,10 +33,12 @@ const styles = StyleSheet.create({
     height: 58,
     fontSize: 16,
     paddingLeft: 20, 
+    paddingRight: 60
   },
   container: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flex:1
   },
   lupa:{
     position:'absolute',
