@@ -1,3 +1,4 @@
+import Input from '@/app/src/components/Input'
 import TemplateNavScreen from '@/app/src/components/TemplateNavScreen'
 import { Text } from '@react-navigation/elements'
 import React from 'react'
@@ -5,7 +6,7 @@ import React from 'react'
 function Clientes() {
   return (
     <TemplateNavScreen label='Clientes'>
-      <Text>aaa</Text>
+      <Input placeholder='Buscar' type='search'/>
     </TemplateNavScreen>
   )
 }
