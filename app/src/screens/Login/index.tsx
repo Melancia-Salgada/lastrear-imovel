@@ -19,7 +19,52 @@ import { Label } from '@react-navigation/elements';
 
   return (
     <View style={styles.container}>
-      <Popis/>
+      <View style={styles.blocoAzul}/>
+      <Image source={require('../../../../assets/images/icon.png')} style={styles.LogoLastrear} />
+      <View style={styles.conteudo}>
+          <Title style={styles.txt1}>
+            Login
+          </Title>
+          <Texto style={styles.subtitulo}>
+            Entre com a sua conta para continuar
+          </Texto>
+
+          <Texto style={styles.label}>
+          Email
+          </Texto>
+          <TextInput style={styles.input}
+          placeholder="seuemail@exemplo.com"
+          value={email}
+          onChangeText={text => setEmail(text)}
+          keyboardType="email-address" 
+          autoCapitalize="none"
+          />
+
+          <Texto style={styles.label}>
+          Senha
+          </Texto>
+          <TextInput style={styles.input}
+          placeholder="Digite sua senha"
+          value={senha}
+          onChangeText={text => setSenha(text)}
+          secureTextEntry={true}
+          autoCapitalize="none"
+          />
+        
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+      <View style={styles.forgotPasswordContainer}>
+        <Text style={styles.forgotPasswordText}>Esqueceu a senha? </Text>
+        <TouchableOpacity onPress={() => {
+          // Adicione aqui a lógica para recuperar a senha
+          console.log('Recuperar senha pressionado');
+        }}>
+          <Texto style={styles.label}>Recuperar</Texto>
+        </TouchableOpacity>
+         
+      </View>
+      </View>
     </View>
   );
 }
