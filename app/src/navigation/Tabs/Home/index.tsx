@@ -8,7 +8,7 @@ function Home() {
   const router = useRouter()
 
   function handleClick() {
-    router.push('/src/screens/Login')
+    router.push('/src/navigation/Tabs/Clientes')
   }
 
   return (

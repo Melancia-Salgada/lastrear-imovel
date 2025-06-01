@@ -44,12 +44,13 @@ const styles = StyleSheet.create ({
     caixa:{
         flexDirection:'column',
         backgroundColor:'#efefef',
-        width:windowWidth * 0.8,
+        width:windowWidth * 0.94,
         height:windowHeight * 0.14,
         paddingHorizontal: windowWidth * 0.06,
         paddingVertical: windowHeight * 0.01,
         borderRadius: 12,
-        padding: 0
+        padding: 0,
+        marginBottom:windowHeight * 0.02
     },
     cliente:{
         flexDirection:'column',
