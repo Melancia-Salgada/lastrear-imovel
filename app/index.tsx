@@ -4,6 +4,7 @@ import CorretorTabs from "@/app/src/navigation/CorretorTabs";
 import { UserContext } from "./src/context/UserContext";
 import { useContext } from "react";
 
+
 export default function Index() {
 
   const { user, setUser } = useContext(UserContext);

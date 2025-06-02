@@ -1,4 +1,5 @@
 import TemplateNavScreen from '@/app/src/components/TemplateNavScreen'
+
 import Texto from '@/app/src/components/Texto'
 import { Ionicons } from '@expo/vector-icons'
 import { Text } from '@react-navigation/elements'
