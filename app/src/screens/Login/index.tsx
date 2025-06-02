@@ -1,10 +1,8 @@
 // /app/blank.tsx
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, TextInputComponent, TextInput, TouchableOpacity } from 'react-native';
-import Title from '../../components/Title';
+import React, { useState } from 'react';
+import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Texto from '../../components/Texto';
-import Popis from '../../components/nseinome'
-import { Label } from '@react-navigation/elements';
+import Title from '../../components/Title';
 
 
 

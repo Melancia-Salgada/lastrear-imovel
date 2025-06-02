@@ -1,3 +1,3 @@
-export interface IColaborador {
+export interface IUsuario {
   
 }
