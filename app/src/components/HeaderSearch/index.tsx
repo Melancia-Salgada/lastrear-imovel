@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Input from '../Input'
 import Botao from '../Botao'
@@ -11,6 +11,9 @@ interface HeaderSearchProps {
 }
 
 function HeaderSearch({criar, handleClickCriar,handleClickFiltro}:HeaderSearchProps) {
+
+  const [pesquisa, setPesquisa] = useState('')
+
   return (
     <View style={styles.header}>
       <Input placeholder='Buscar' type='search'/>

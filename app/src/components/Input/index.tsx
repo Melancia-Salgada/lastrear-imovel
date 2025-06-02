@@ -13,6 +13,7 @@ function Input({placeholder, type}: InputProps) {
   return (
     <View style={styles.container}>
       <TextInput
+        
         placeholder={placeholder}
         style={styles.input}
       />

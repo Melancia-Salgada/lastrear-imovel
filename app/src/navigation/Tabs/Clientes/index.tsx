@@ -9,6 +9,7 @@ import {
   Image,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -27,18 +28,60 @@ function Clientes() {
 
   useEffect(() => {
     // Simulando uma chamada de API
-    const mockClientes = [
+    const mockClientes: IClienteLista[] = [
       {
         nome: "João",
         tipoImovel: "Apartamento",
         corretor: "Maria",
-        estado: "Em negociação",
+        estado: "andamento",
       },
       {
         nome: "Ana",
         tipoImovel: "Casa",
         corretor: "Carlos",
-        estado: "Concluído",
+        estado: "aberto",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "aberto",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "encerrado",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "encerrado",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "encerrado",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "aberto",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "encerrado",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "andamento",
       },
     ];
     setClientes(mockClientes);
@@ -58,8 +101,11 @@ function Clientes() {
 
   return (
     <TemplateNavScreen label="Clientes">
-      <HeaderSearch/>
+      <HeaderSearch handleClickFiltro={handleOpenModal}/>
 
+
+      <View style={styles.listaContainer}>
+        <ScrollView>
       {clientes.map((item, index) => (
         <Listinha
           nomeCliente={item.nome}
@@ -69,6 +115,9 @@ function Clientes() {
           key={index}
         />
       ))}
+      </ScrollView>
+      </View>
+      
 
       <Modal
         animationType="slide"
@@ -152,4 +201,9 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "stretch",
   },
+  listaContainer: {
+    justifyContent: 'center',
+    marginTop: 12,
+    paddingBottom:60
+  }
 });

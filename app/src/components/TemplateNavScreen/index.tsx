@@ -49,11 +49,11 @@ const styles = StyleSheet.create ({
   },
   sublabel: {
     color: '#fff',
-    marginTop: windowHeight * 0.007
+    marginTop: -8
   },
   titleContainer: {
     marginLeft: 12,
     marginTop: 40,
     marginBottom: 12
-  }
+  },
 });
