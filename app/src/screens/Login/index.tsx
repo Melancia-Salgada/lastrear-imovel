@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, TextInputComponent, TextInput, TouchableOpacity } from 'react-native';
 import Title from '../../components/Title';
 import Texto from '../../components/Texto';
+import Popis from '../../components/nseinome'
 import { Label } from '@react-navigation/elements';
 
 

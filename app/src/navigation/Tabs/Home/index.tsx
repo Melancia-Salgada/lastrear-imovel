@@ -9,14 +9,13 @@ function Home() {
   const router = useRouter()
 
   function handleClick() {
-    router.push('/src/screens/Login')
+    router.push('/src/navigation/Tabs/Clientes')
   }
 
   return (
     <TemplateNavScreen label='Olá, Eduardo!' sublabel='Espero que tenha um ótimo dia.'>
       <Text>aaa</Text>
-
-      
+      <Button onPressOut={handleClick}>Abrir tela de Componente</Button>
 
     </TemplateNavScreen>
   )

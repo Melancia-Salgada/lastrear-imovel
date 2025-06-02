@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { SafeAreaView, StyleSheet,  View } from 'react-native'
+import { Dimensions, SafeAreaView, StyleSheet,  View } from 'react-native'
 import Title from '../Title'
 import Texto from '../Texto'
 
@@ -8,6 +8,9 @@ interface TemplateNavScreenProps {
   label:string,
   sublabel?:string 
 }
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 function TemplateNavScreen({children, label, sublabel}: TemplateNavScreenProps) {
   return (
@@ -36,8 +39,8 @@ const styles = StyleSheet.create ({
     flex: 1,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingTop: 28,
-    paddingHorizontal: 12
+    paddingTop: windowHeight * 0.035,
+    paddingHorizontal: windowWidth * 0.025
   },
   label: {
     fontSize: 36,
@@ -46,7 +49,7 @@ const styles = StyleSheet.create ({
   },
   sublabel: {
     color: '#fff',
-    marginTop: -8
+    marginTop: windowHeight * 0.007
   },
   titleContainer: {
     marginLeft: 12,
