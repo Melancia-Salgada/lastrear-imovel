@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
 import HeaderSearch from "@/app/src/components/HeaderSearch";
+import Title from "@/app/src/components/Title";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -130,11 +131,71 @@ function Clientes() {
             style={styles.modalView}
             onPress={(event) => event.stopPropagation()}
           >
-            <Texto>Matheus Vital, com fé no pé</Texto>
-            <Image
-              style={styles.stretch}
-              source={require("@/assets/images/comfenope.jpg")}
-            />
+            <View style={styles.cabecalhoModal}>
+              <Title style={styles.tituloModal}>
+                Filtros
+              </Title>
+            </View>
+            <View style={styles.filtroModal}>
+              //Status
+              <Texto style={styles.filtroLabel}>
+                Status
+              </Texto>
+              <View style={styles.filtroSection} >
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Em Andamento
+                  </Texto>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Aberto
+                  </Texto>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Encerrado
+                  </Texto>
+                </TouchableOpacity>
+              </View>
+
+              //Tipo
+              <Texto style={styles.filtroLabel}>
+                Tipo
+              </Texto>
+              <View style={styles.filtroSection} >
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Apartamento
+                  </Texto>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Casa
+                  </Texto>
+                </TouchableOpacity>
+              </View>
+
+              //Estado
+              <Texto style={styles.filtroLabel}>
+                Estado
+              </Texto>
+              <View style={styles.filtroSection} >
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Novo
+                  </Texto>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filtroCaixa}>
+                  <Texto>
+                    Usado
+                  </Texto>
+                </TouchableOpacity>
+              </View>
+              
+
+            </View> 
+              
           </Pressable>
         </Pressable>
       </Modal>
@@ -186,7 +247,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 25,
-    alignItems: "center",
+    alignItems: 'flex-start',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -205,5 +266,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 12,
     paddingBottom:60
+  },
+  cabecalhoModal:{
+    justifyContent: 'flex-start',
+    alignItems:'flex-start',
+    paddingBottom:8,
+    borderBottomWidth:1,
+    width:'100%',
+    marginBottom:22
+  },
+  tituloModal:{
+    fontWeight:'bold',
+    fontSize:24
+  },
+  filtroModal:{
+
+  },
+  filtroLabel:{
+    fontSize:14,
+    marginBottom:5
+  },
+  filtroSection:{
+    flexDirection: 'row',
+  },
+  filtroCaixa:{
+    borderWidth:1,
+    borderColor:'#9C9797',
+    borderRadius:12,
+    padding:6,
+    marginRight:12,
+    backgroundColor:'#efefef',
+    marginBottom:7
   }
 });
