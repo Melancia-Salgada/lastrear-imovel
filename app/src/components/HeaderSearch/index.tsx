@@ -8,15 +8,16 @@ interface HeaderSearchProps {
   criar?: boolean
   handleClickCriar?: () => void
   handleClickFiltro?: () => void
+  valor: string
+  onChange: (texto: string) => void
 }
 
-function HeaderSearch({criar, handleClickCriar,handleClickFiltro}:HeaderSearchProps) {
+function HeaderSearch({criar, handleClickCriar,handleClickFiltro, onChange, valor}:HeaderSearchProps) {
 
-  const [pesquisa, setPesquisa] = useState('')
 
   return (
     <View style={styles.header}>
-      <Input placeholder='Buscar' type='search'/>
+      <Input placeholder='Buscar' type='search' valor={valor} onChange={onChange}/>
       <Botao type='quadrado' handleClick={handleClickFiltro}>
         <Octicons name='filter' size={36} color={'#8D8D8D'}/>
       </Botao>
