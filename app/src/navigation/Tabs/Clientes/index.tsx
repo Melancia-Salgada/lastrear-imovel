@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
 import HeaderSearch from "@/app/src/components/HeaderSearch";
+import { useRouter } from "expo-router";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -25,67 +26,37 @@ function Clientes() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const[clientes, setClientes] = useState<IClienteLista[]>([])
+  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>([])
+
+
+  const router = useRouter()
+  
+  const [pesquisa, setPesquisa] = useState('')
 
   useEffect(() => {
-    // Simulando uma chamada de API
-    const mockClientes: IClienteLista[] = [
-      {
-        nome: "João",
-        tipoImovel: "Apartamento",
-        corretor: "Maria",
-        estado: "andamento",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "aberto",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "aberto",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "encerrado",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "encerrado",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "encerrado",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "aberto",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "encerrado",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "andamento",
-      },
-    ];
-    setClientes(mockClientes);
+  const mockClientes: IClienteLista[] = [
+    //simula Chamada de API
+    { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", estado: "andamento" },
+    { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
+    { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", estado: "encerrado" },
+    { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
+    { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", estado: "andamento" },
+  ];
+  setClientes(mockClientes);
+  setClientesFiltrados(mockClientes); 
 }, []);
+
+
+
+  //Filtra Clientes pra pesquisa
+  useEffect(() => {
+  const termo = pesquisa.toLowerCase();
+  const filtrado = clientes.filter((cliente) =>
+    cliente.nome.toLowerCase().includes(termo)
+  );
+  setClientesFiltrados(filtrado);
+}, [pesquisa, clientes]);
+  
 
   // Função para abrir o modal
   const handleOpenModal = () => {
@@ -99,21 +70,28 @@ function Clientes() {
     console.log("Modal fechado");
   };
 
+  const handleClienteClose = () => {
+    router.push('/src/screens/SobreCliente')
+  }
+
   return (
     <TemplateNavScreen label="Clientes">
-      <HeaderSearch handleClickFiltro={handleOpenModal}/>
+      <HeaderSearch valor={pesquisa} onChange={setPesquisa} handleClickFiltro={handleOpenModal}/>
 
 
       <View style={styles.listaContainer}>
         <ScrollView>
-      {clientes.map((item, index) => (
-        <Listinha
+      {clientesFiltrados.map((item, index) => (
+        <Pressable onPress={handleClienteClose} 
+          key={index}>
+          <Listinha
           nomeCliente={item.nome}
           tipoImovel={item.tipoImovel}
           nomeCorretor={item.corretor}
           estadoNegocio={item.estado}
-          key={index}
         />
+        </Pressable>
+        
       ))}
       </ScrollView>
       </View>
@@ -145,20 +123,13 @@ function Clientes() {
 export default Clientes;
 
 const styles = StyleSheet.create({
-  areaBusca: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: windowHeight * 0.03,
-  },
   campoBusca: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#efefef",
-    width: windowWidth * 0.75,
-    height: windowHeight * 0.07,
-    borderRadius: windowHeight * 0.01,
-    paddingHorizontal: windowWidth * 0.03,
+    borderRadius: 12,
+    paddingHorizontal: 12,
   },
   inputBusca: {
     width: "100%",
@@ -167,9 +138,7 @@ const styles = StyleSheet.create({
   },
   botaoFiltro: {
     backgroundColor: "#efefef",
-    width: windowWidth * 0.13,
-    height: windowHeight * 0.07,
-    borderRadius: windowHeight * 0.01,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -182,7 +151,6 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: "white",
     width: "100%",
-    height: windowHeight * 0.6,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 25,

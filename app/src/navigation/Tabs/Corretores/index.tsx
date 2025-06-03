@@ -6,7 +6,6 @@ import { useRouter } from 'expo-router'
 
 function Corretores() {
 
-  const snapPoints = useMemo(() => ['25%', '50%', '70%'], [])
 
   const router = useRouter()
 
@@ -19,7 +18,7 @@ function Corretores() {
     <TemplateNavScreen label='Corretores'>
       <HeaderSearch criar handleClickCriar={handleClickNovo}/>
     </TemplateNavScreen>
-    </>
+    </> 
     
   )
 }
