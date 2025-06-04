@@ -1,12 +1,11 @@
 import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
-
 import Listinha from "@/app/src/components/ListinhaCliente";
 import Texto from "@/app/src/components/Texto";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
+  Animated,
   Dimensions,
-  Image,
   Modal,
   Pressable,
   ScrollView,
@@ -22,50 +21,26 @@ import { useRouter } from "expo-router";
 
 function Clientes() {
   const [modalVisible, setModalVisible] = useState(false);
-
   const [clientes, setClientes] = useState<IClienteLista[]>([]);
-  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>(
-    []
-  );
-
+  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>([]);
+  const [pesquisa, setPesquisa] = useState("");
   const router = useRouter();
 
-  const [pesquisa, setPesquisa] = useState("");
+  // Animação
+  const slideAnim = useState(new Animated.Value(300))[0];
 
   useEffect(() => {
     const mockClientes: IClienteLista[] = [
-      //simula Chamada de API
-      {
-        nome: "João",
-        tipoImovel: "Apartamento",
-        corretor: "Maria",
-        estado: "andamento",
-      },
+      { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", estado: "andamento" },
       { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-      {
-        nome: "Bruno",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "encerrado",
-      },
-      {
-        nome: "Mariana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        estado: "aberto",
-      },
-      {
-        nome: "Fernanda",
-        tipoImovel: "Apartamento",
-        corretor: "Carlos",
-        estado: "andamento",
-      },
+      { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", estado: "encerrado" },
+      { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
+      { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", estado: "andamento" },
     ];
     setClientes(mockClientes);
     setClientesFiltrados(mockClientes);
   }, []);
 
-  //Filtra Clientes pra pesquisa
   useEffect(() => {
     const termo = pesquisa.toLowerCase();
     const filtrado = clientes.filter((cliente) =>
@@ -74,16 +49,23 @@ function Clientes() {
     setClientesFiltrados(filtrado);
   }, [pesquisa, clientes]);
 
-  // Função para abrir o modal
   const handleOpenModal = () => {
     setModalVisible(true);
-    console.log("Modal aberto");
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   };
 
-  // Função para fechar o modal
   const handleCloseModal = () => {
-    setModalVisible(false);
-    console.log("Modal fechado");
+    Animated.timing(slideAnim, {
+      toValue: 300,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setModalVisible(false);
+    });
   };
 
   const handleClienteOpen = () => {
@@ -114,21 +96,23 @@ function Clientes() {
       </View>
 
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={modalVisible}
         onRequestClose={handleCloseModal}
       >
         <Pressable style={styles.centeredView} onPress={handleCloseModal}>
-          <Pressable
-            style={styles.modalView}
-            onPress={(event) => event.stopPropagation()}
+          <Animated.View
+            style={[
+              styles.modalView,
+              { transform: [{ translateY: slideAnim }] },
+            ]}
           >
             <View style={styles.cabecalhoModal}>
               <Title style={styles.tituloModal}>Filtros</Title>
             </View>
+
             <View style={styles.filtroModal}>
-              {/*Status*/}
               <Texto style={styles.filtroLabel}>Status</Texto>
               <View style={styles.filtroSection}>
                 <TouchableOpacity style={styles.filtroCaixa}>
@@ -142,7 +126,6 @@ function Clientes() {
                 </TouchableOpacity>
               </View>
 
-              {/*Tipo*/}
               <Texto style={styles.filtroLabel}>Tipo</Texto>
               <View style={styles.filtroSection}>
                 <TouchableOpacity style={styles.filtroCaixa}>
@@ -153,7 +136,6 @@ function Clientes() {
                 </TouchableOpacity>
               </View>
 
-              {/*Estado*/}
               <Texto style={styles.filtroLabel}>Estado</Texto>
               <View style={styles.filtroSection}>
                 <TouchableOpacity style={styles.filtroCaixa}>
@@ -164,7 +146,7 @@ function Clientes() {
                 </TouchableOpacity>
               </View>
             </View>
-          </Pressable>
+          </Animated.View>
         </Pressable>
       </Modal>
     </TemplateNavScreen>
@@ -214,11 +196,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-  stretch: {
-    width: 400,
-    height: 200,
-    resizeMode: "stretch",
   },
   listaContainer: {
     justifyContent: "center",
