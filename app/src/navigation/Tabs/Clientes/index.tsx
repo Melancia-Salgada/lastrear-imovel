@@ -5,12 +5,10 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   Animated,
-  Dimensions,
   Modal,
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -24,18 +22,21 @@ function Clientes() {
   const [clientes, setClientes] = useState<IClienteLista[]>([]);
   const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>([]);
   const [pesquisa, setPesquisa] = useState("");
-  const router = useRouter();
 
-  // Animação
+  const [filtroStatus, setFiltroStatus] = useState<string[]>([]);
+  const [filtroTipo, setFiltroTipo] = useState<string[]>([]);
+  const [filtroEstado, setFiltroEstado] = useState<string[]>([]);
+
+  const router = useRouter();
   const slideAnim = useState(new Animated.Value(300))[0];
 
   useEffect(() => {
     const mockClientes: IClienteLista[] = [
-      { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", estado: "andamento" },
-      { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-      { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", estado: "encerrado" },
-      { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-      { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", estado: "andamento" },
+      { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", status: "andamento", estadoImovel: "Novo" },
+      { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
+      { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", status: "encerrado", estadoImovel: "Novo" },
+      { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
+      { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "andamento", estadoImovel: "Novo" },
     ];
     setClientes(mockClientes);
     setClientesFiltrados(mockClientes);
@@ -43,11 +44,15 @@ function Clientes() {
 
   useEffect(() => {
     const termo = pesquisa.toLowerCase();
-    const filtrado = clientes.filter((cliente) =>
-      cliente.nome.toLowerCase().includes(termo)
-    );
+    const filtrado = clientes.filter((cliente) => {
+      const nomeOk = cliente.nome.toLowerCase().includes(termo);
+      const statusOk = filtroStatus.length > 0 ? filtroStatus.includes(cliente.status) : true;
+      const tipoOk = filtroTipo.length > 0 ? filtroTipo.includes(cliente.tipoImovel) : true;
+      const estadoOk = filtroEstado.length > 0 ? filtroEstado.includes(cliente.estadoImovel) : true;
+      return nomeOk && statusOk && tipoOk && estadoOk;
+    });
     setClientesFiltrados(filtrado);
-  }, [pesquisa, clientes]);
+  }, [pesquisa, clientes, filtroStatus, filtroTipo, filtroEstado]);
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -68,6 +73,18 @@ function Clientes() {
     });
   };
 
+  const toggleFiltro = (
+    valor: string,
+    filtros: string[],
+    setFiltros: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
+    if (filtros.includes(valor)) {
+      setFiltros(filtros.filter((item) => item !== valor));
+    } else {
+      setFiltros([...filtros, valor]);
+    }
+  };
+
   const handleClienteOpen = () => {
     router.push("/src/screens/SobreCliente");
   };
@@ -78,6 +95,7 @@ function Clientes() {
         valor={pesquisa}
         onChange={setPesquisa}
         handleClickFiltro={handleOpenModal}
+        filtroAtivo={filtroStatus.length > 0}
       />
 
       <View style={styles.listaContainer}>
@@ -88,7 +106,8 @@ function Clientes() {
                 nomeCliente={item.nome}
                 tipoImovel={item.tipoImovel}
                 nomeCorretor={item.corretor}
-                estadoNegocio={item.estado}
+                status={item.status}
+                estadoImovel={item.estadoImovel}
               />
             </Pressable>
           ))}
@@ -115,35 +134,54 @@ function Clientes() {
             <View style={styles.filtroModal}>
               <Texto style={styles.filtroLabel}>Status</Texto>
               <View style={styles.filtroSection}>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Em Andamento</Texto>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Aberto</Texto>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Encerrado</Texto>
-                </TouchableOpacity>
+                {["andamento", "aberto", "encerrado"].map((status) => (
+                  <TouchableOpacity
+                    key={status}
+                    onPress={() => toggleFiltro(status, filtroStatus, setFiltroStatus)}
+                    style={[
+                      styles.filtroCaixa,
+                      filtroStatus.includes(status) && styles.filtroSelecionado,
+                    ]}
+                  >
+                    <Texto>
+                      {status === "andamento"
+                        ? "Em Andamento"
+                        : status.charAt(0).toUpperCase() + status.slice(1)}
+                    </Texto>
+                  </TouchableOpacity>
+                ))}
               </View>
 
               <Texto style={styles.filtroLabel}>Tipo</Texto>
               <View style={styles.filtroSection}>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Apartamento</Texto>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Casa</Texto>
-                </TouchableOpacity>
+                {["Apartamento", "Casa"].map((tipo) => (
+                  <TouchableOpacity
+                    key={tipo}
+                    onPress={() => toggleFiltro(tipo, filtroTipo, setFiltroTipo)}
+                    style={[
+                      styles.filtroCaixa,
+                      filtroTipo.includes(tipo) && styles.filtroSelecionado,
+                    ]}
+                  >
+                    <Texto>{tipo}</Texto>
+                  </TouchableOpacity>
+                ))}
               </View>
 
               <Texto style={styles.filtroLabel}>Estado</Texto>
               <View style={styles.filtroSection}>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Novo</Texto>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>Usado</Texto>
-                </TouchableOpacity>
+                {["Novo", "Usado"].map((estado) => (
+                  <TouchableOpacity
+                    key={estado}
+                    onPress={() => toggleFiltro(estado, filtroEstado, setFiltroEstado)}
+                    style={[
+                      styles.filtroCaixa,
+                      filtroEstado.includes(estado) && styles.filtroSelecionado,
+                    ]}
+                  >
+                    <Texto>{estado}</Texto>
+                  </TouchableOpacity>
+                ))}
               </View>
             </View>
           </Animated.View>
@@ -221,6 +259,8 @@ const styles = StyleSheet.create({
   },
   filtroSection: {
     flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 10,
   },
   filtroCaixa: {
     borderWidth: 1,
@@ -230,5 +270,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
     backgroundColor: "#efefef",
     marginBottom: 7,
+  },
+  filtroSelecionado: {
+    backgroundColor: "#B9D9B7",
+    borderColor: "#6C8664",
   },
 });

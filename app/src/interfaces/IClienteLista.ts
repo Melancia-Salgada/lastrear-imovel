@@ -2,5 +2,6 @@ export interface IClienteLista {
   nome: string,
   tipoImovel: string,
   corretor: string,
-  estado: 'andamento' | 'aberto' | 'encerrado';
+  estadoImovel: string,
+  status: 'andamento' | 'aberto' | 'encerrado' | 'concluido';
 }

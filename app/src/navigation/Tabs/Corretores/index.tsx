@@ -21,9 +21,9 @@ function Corretores() {
   const [corretores, setCorretores] = useState<ICorretorLista[]>([]);
   const [corretoresFiltrados, setCorretoresFiltrados] = useState<ICorretorLista[]>([]);
   const [pesquisa, setPesquisa] = useState("");
+  const [filtroStatus, setFiltroStatus] = useState<string[]>([]);
   const router = useRouter();
 
-  // Animação
   const slideAnim = useState(new Animated.Value(300))[0];
 
   function handleClickNovo() {
@@ -46,11 +46,15 @@ function Corretores() {
 
   useEffect(() => {
     const termo = pesquisa.toLowerCase();
-    const filtrado = corretores.filter((corretor) =>
-      corretor.nome.toLowerCase().includes(termo)
-    );
+
+    const filtrado = corretores.filter((corretor) => {
+      const nomeOk = corretor.nome.toLowerCase().includes(termo);
+      const statusOk = filtroStatus.length === 0 || filtroStatus.includes(corretor.status);
+      return nomeOk && statusOk;
+    });
+
     setCorretoresFiltrados(filtrado);
-  }, [pesquisa, corretores]);
+  }, [pesquisa, corretores, filtroStatus]);
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -71,6 +75,14 @@ function Corretores() {
     });
   };
 
+  const toggleFiltroStatus = (valor: string) => {
+    if (filtroStatus.includes(valor)) {
+      setFiltroStatus(filtroStatus.filter((item) => item !== valor));
+    } else {
+      setFiltroStatus([...filtroStatus, valor]);
+    }
+  };
+
   return (
     <TemplateNavScreen label="Corretores">
       <HeaderSearch
@@ -79,6 +91,7 @@ function Corretores() {
         criar
         handleClickCriar={handleClickNovo}
         handleClickFiltro={handleOpenModal}
+        filtroAtivo={filtroStatus.length > 0}
       />
 
       <View style={styles.listaContainer}>
@@ -111,12 +124,18 @@ function Corretores() {
 
             <Texto style={styles.filtroLabel}>Status</Texto>
             <View style={styles.filtroSection}>
-              <TouchableOpacity style={styles.filtroCaixa}>
-                <Texto>Ativo</Texto>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.filtroCaixa}>
-                <Texto>Inativo</Texto>
-              </TouchableOpacity>
+              {["ativo", "inativo"].map((status) => (
+                <TouchableOpacity
+                  key={status}
+                  onPress={() => toggleFiltroStatus(status)}
+                  style={[
+                    styles.filtroCaixa,
+                    filtroStatus.includes(status) && styles.filtroSelecionado,
+                  ]}
+                >
+                  <Texto>{status.charAt(0).toUpperCase() + status.slice(1)}</Texto>
+                </TouchableOpacity>
+              ))}
             </View>
           </Animated.View>
         </Pressable>
@@ -174,5 +193,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
     backgroundColor: "#efefef",
     marginBottom: 7,
+  },
+  filtroSelecionado: {
+    backgroundColor: "#B9D9B7", 
+    borderColor: "#6C8664",
   },
 });
