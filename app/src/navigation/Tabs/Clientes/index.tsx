@@ -31,12 +31,12 @@ function Clientes() {
 
   useEffect(() => {
     const mockClientes: IClienteLista[] = [
-      { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", estado: "andamento" },
-      { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-      { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", estado: "encerrado" },
-      { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-      { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", estado: "andamento" },
-    ];
+      { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", status: "andamento", estadoImovel: "Novo" },
+      { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
+      { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", status: "encerrado", estadoImovel: "Novo" },
+      { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
+      { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "andamento", estadoImovel: "Novo" },
+    ]
     setClientes(mockClientes);
     setClientesFiltrados(mockClientes);
   }, []);
@@ -88,7 +88,8 @@ function Clientes() {
                 nomeCliente={item.nome}
                 tipoImovel={item.tipoImovel}
                 nomeCorretor={item.corretor}
-                estadoNegocio={item.estado}
+                status={item.status}
+                estadoImovel={item.estadoImovel}
               />
             </Pressable>
           ))}

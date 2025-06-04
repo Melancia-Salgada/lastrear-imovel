@@ -7,21 +7,22 @@ interface ListinhaProps {
     nomeCliente: string;
     tipoImovel: string;
     nomeCorretor: string;
-    estadoNegocio: 'andamento' | 'aberto' | 'encerrado' | 'concluido'; 
-
+    status: 'andamento' | 'aberto' | 'encerrado' | 'concluido';
+    estadoImovel: string 
 }
 
 export default function Listinha({ 
     nomeCliente, 
     tipoImovel, 
+    estadoImovel,
     nomeCorretor, 
-    estadoNegocio 
+    status
 }: ListinhaProps){
 
     let txt = ''
 
     function checkStatus() {
-        switch (estadoNegocio) {
+        switch (status) {
             case 'andamento':
                 txt='Em andamento'
                 return styles.andamento
@@ -43,11 +44,11 @@ export default function Listinha({
         <View style={styles.caixa}>
             <View style={styles.cliente}>
                 <Title style={{fontWeight:'bold'}}>{nomeCliente}</Title>
-                <Texto>apartamento - novo</Texto>
+                <Texto>{tipoImovel} - {estadoImovel}</Texto>
             </View>      
             <View style={styles.corretor}>
                 <Texto>
-                Carlos Nobrega
+                {nomeCorretor}
                 </Texto>
                 <View style={[styles.estado, checkStatus()]}>
                     <Texto>{txt}</Texto>

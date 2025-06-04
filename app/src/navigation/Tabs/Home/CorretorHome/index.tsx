@@ -13,11 +13,13 @@ function CorretorHome() {
 
   useEffect(() => {
     const mockClientes: IClienteLista[] = [
-      { nome: 'Lucas', tipoImovel: 'Apartamento', corretor: 'Eduardo', estado: 'andamento' },
-      { nome: 'Beatriz', tipoImovel: 'Casa', corretor: 'Eduardo', estado: 'aberto' },
-      { nome: 'Mateus', tipoImovel: 'Cobertura', corretor: 'Eduardo', estado: 'encerrado' },
-      { nome: 'Juliana', tipoImovel: 'Apartamento', corretor: 'Eduardo', estado: 'aberto' },
-    ]
+  { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", status: "andamento", estadoImovel: "Novo" },
+  { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
+  { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", status: "encerrado", estadoImovel: "Novo" },
+  { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
+  { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "andamento", estadoImovel: "Novo" },
+]
+
     setClientesAtuais(mockClientes)
   }, [])
 
@@ -35,7 +37,8 @@ function CorretorHome() {
               nomeCliente={item.nome}
               tipoImovel={item.tipoImovel}
               nomeCorretor={item.corretor}
-              estadoNegocio={item.estado}
+              status={item.status}
+              estadoImovel={item.estadoImovel}
             />
           </Pressable>
         ))}
