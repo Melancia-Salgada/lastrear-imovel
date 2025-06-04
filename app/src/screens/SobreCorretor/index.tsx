@@ -4,7 +4,7 @@ import HeaderMais from '../../components/HeaderMais'
 import { useRouter } from 'expo-router'
 import { StyleSheet } from 'react-native'
 
-function SobreCliente() {
+function SobreCorretor() {
 
   const router = useRouter()
   
@@ -20,7 +20,7 @@ function SobreCliente() {
   )
 }
 
-export default SobreCliente
+export default SobreCorretor
 
 const styles = StyleSheet.create({
   novo: {

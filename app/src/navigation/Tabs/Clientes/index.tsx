@@ -1,6 +1,6 @@
 import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
 
-import Listinha from "@/app/src/components/Listinha";
+import Listinha from "@/app/src/components/ListinhaCliente";
 import Texto from "@/app/src/components/Texto";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -20,44 +20,59 @@ import HeaderSearch from "@/app/src/components/HeaderSearch";
 import Title from "@/app/src/components/Title";
 import { useRouter } from "expo-router";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
 function Clientes() {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const[clientes, setClientes] = useState<IClienteLista[]>([])
-  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>([])
+  const [clientes, setClientes] = useState<IClienteLista[]>([]);
+  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>(
+    []
+  );
 
+  const router = useRouter();
 
-  const router = useRouter()
-  
-  const [pesquisa, setPesquisa] = useState('')
+  const [pesquisa, setPesquisa] = useState("");
 
   useEffect(() => {
-  const mockClientes: IClienteLista[] = [
-    //simula Chamada de API
-    { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", estado: "andamento" },
-    { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-    { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", estado: "encerrado" },
-    { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
-    { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", estado: "andamento" },
-  ];
-  setClientes(mockClientes);
-  setClientesFiltrados(mockClientes); 
-}, []);
-
-
+    const mockClientes: IClienteLista[] = [
+      //simula Chamada de API
+      {
+        nome: "João",
+        tipoImovel: "Apartamento",
+        corretor: "Maria",
+        estado: "andamento",
+      },
+      { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", estado: "aberto" },
+      {
+        nome: "Bruno",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "encerrado",
+      },
+      {
+        nome: "Mariana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        estado: "aberto",
+      },
+      {
+        nome: "Fernanda",
+        tipoImovel: "Apartamento",
+        corretor: "Carlos",
+        estado: "andamento",
+      },
+    ];
+    setClientes(mockClientes);
+    setClientesFiltrados(mockClientes);
+  }, []);
 
   //Filtra Clientes pra pesquisa
   useEffect(() => {
-  const termo = pesquisa.toLowerCase();
-  const filtrado = clientes.filter((cliente) =>
-    cliente.nome.toLowerCase().includes(termo)
-  );
-  setClientesFiltrados(filtrado);
-}, [pesquisa, clientes]);
-  
+    const termo = pesquisa.toLowerCase();
+    const filtrado = clientes.filter((cliente) =>
+      cliente.nome.toLowerCase().includes(termo)
+    );
+    setClientesFiltrados(filtrado);
+  }, [pesquisa, clientes]);
 
   // Função para abrir o modal
   const handleOpenModal = () => {
@@ -71,32 +86,32 @@ function Clientes() {
     console.log("Modal fechado");
   };
 
-  const handleClienteClose = () => {
-    router.push('/src/screens/SobreCliente')
-  }
+  const handleClienteOpen = () => {
+    router.push("/src/screens/SobreCliente");
+  };
 
   return (
     <TemplateNavScreen label="Clientes">
-      <HeaderSearch valor={pesquisa} onChange={setPesquisa} handleClickFiltro={handleOpenModal}/>
-
+      <HeaderSearch
+        valor={pesquisa}
+        onChange={setPesquisa}
+        handleClickFiltro={handleOpenModal}
+      />
 
       <View style={styles.listaContainer}>
         <ScrollView>
-      {clientesFiltrados.map((item, index) => (
-        <Pressable onPress={handleClienteClose} 
-          key={index}>
-          <Listinha
-          nomeCliente={item.nome}
-          tipoImovel={item.tipoImovel}
-          nomeCorretor={item.corretor}
-          estadoNegocio={item.estado}
-        />
-        </Pressable>
-        
-      ))}
-      </ScrollView>
+          {clientesFiltrados.map((item, index) => (
+            <Pressable onPress={handleClienteOpen} key={index}>
+              <Listinha
+                nomeCliente={item.nome}
+                tipoImovel={item.tipoImovel}
+                nomeCorretor={item.corretor}
+                estadoNegocio={item.estado}
+              />
+            </Pressable>
+          ))}
+        </ScrollView>
       </View>
-      
 
       <Modal
         animationType="slide"
@@ -110,70 +125,45 @@ function Clientes() {
             onPress={(event) => event.stopPropagation()}
           >
             <View style={styles.cabecalhoModal}>
-              <Title style={styles.tituloModal}>
-                Filtros
-              </Title>
+              <Title style={styles.tituloModal}>Filtros</Title>
             </View>
             <View style={styles.filtroModal}>
-              //Status
-              <Texto style={styles.filtroLabel}>
-                Status
-              </Texto>
-              <View style={styles.filtroSection} >
+              {/*Status*/}
+              <Texto style={styles.filtroLabel}>Status</Texto>
+              <View style={styles.filtroSection}>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Em Andamento
-                  </Texto>
+                  <Texto>Em Andamento</Texto>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Aberto
-                  </Texto>
+                  <Texto>Aberto</Texto>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Encerrado
-                  </Texto>
+                  <Texto>Encerrado</Texto>
                 </TouchableOpacity>
               </View>
 
-              //Tipo
-              <Texto style={styles.filtroLabel}>
-                Tipo
-              </Texto>
-              <View style={styles.filtroSection} >
+              {/*Tipo*/}
+              <Texto style={styles.filtroLabel}>Tipo</Texto>
+              <View style={styles.filtroSection}>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Apartamento
-                  </Texto>
+                  <Texto>Apartamento</Texto>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Casa
-                  </Texto>
+                  <Texto>Casa</Texto>
                 </TouchableOpacity>
               </View>
 
-              //Estado
-              <Texto style={styles.filtroLabel}>
-                Estado
-              </Texto>
-              <View style={styles.filtroSection} >
+              {/*Estado*/}
+              <Texto style={styles.filtroLabel}>Estado</Texto>
+              <View style={styles.filtroSection}>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Novo
-                  </Texto>
+                  <Texto>Novo</Texto>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.filtroCaixa}>
-                  <Texto>
-                    Usado
-                  </Texto>
+                  <Texto>Usado</Texto>
                 </TouchableOpacity>
               </View>
-              
-
-            </View> 
-              
+            </View>
           </Pressable>
         </Pressable>
       </Modal>
@@ -215,7 +205,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 25,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -231,39 +221,37 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
   },
   listaContainer: {
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: 12,
-    paddingBottom:60
+    paddingBottom: 60,
   },
-  cabecalhoModal:{
-    justifyContent: 'flex-start',
-    alignItems:'flex-start',
-    paddingBottom:8,
-    borderBottomWidth:1,
-    width:'100%',
-    marginBottom:22
+  cabecalhoModal: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    width: "100%",
+    marginBottom: 22,
   },
-  tituloModal:{
-    fontWeight:'bold',
-    fontSize:24
+  tituloModal: {
+    fontWeight: "bold",
+    fontSize: 24,
   },
-  filtroModal:{
-
+  filtroModal: {},
+  filtroLabel: {
+    fontSize: 14,
+    marginBottom: 5,
   },
-  filtroLabel:{
-    fontSize:14,
-    marginBottom:5
+  filtroSection: {
+    flexDirection: "row",
   },
-  filtroSection:{
-    flexDirection: 'row',
+  filtroCaixa: {
+    borderWidth: 1,
+    borderColor: "#9C9797",
+    borderRadius: 12,
+    padding: 6,
+    marginRight: 12,
+    backgroundColor: "#efefef",
+    marginBottom: 7,
   },
-  filtroCaixa:{
-    borderWidth:1,
-    borderColor:'#9C9797',
-    borderRadius:12,
-    padding:6,
-    marginRight:12,
-    backgroundColor:'#efefef',
-    marginBottom:7
-  }
 });
