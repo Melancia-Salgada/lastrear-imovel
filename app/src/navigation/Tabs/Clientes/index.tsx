@@ -81,7 +81,7 @@ function Clientes() {
       />
 
       <View style={styles.listaContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           {clientesFiltrados.map((item, index) => (
             <Pressable onPress={handleClienteOpen} key={index}>
               <Listinha
