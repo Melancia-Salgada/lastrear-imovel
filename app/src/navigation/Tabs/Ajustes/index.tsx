@@ -17,7 +17,7 @@ function Ajustes() {
         </Pressable>
         <Pressable style={[styles.buttonContainer, styles.vermelho]}>
           <FontAwesome6 name='door-closed'size={32}/>
-          <Title>Sair</Title>
+          <Title style={styles.texto}>Sair</Title>
         </Pressable>
       </View>
     </TemplateNavScreen>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   container:{
     flexDirection: 'column',
-    gap: 20
+    gap: 20,
   },
   vermelho: {
     backgroundColor:'#FFA3A3',
@@ -51,5 +51,5 @@ const styles = StyleSheet.create({
     backgroundColor:'#CECECE',
     borderColor: '#9C9797',
     borderWidth: 1
-  },
+  }
 })
