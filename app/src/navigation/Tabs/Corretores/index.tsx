@@ -91,6 +91,7 @@ function Corretores() {
         criar
         handleClickCriar={handleClickNovo}
         handleClickFiltro={handleOpenModal}
+        filtroAtivo={filtroStatus.length > 0}
       />
 
       <View style={styles.listaContainer}>

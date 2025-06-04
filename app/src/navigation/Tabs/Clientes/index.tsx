@@ -95,6 +95,7 @@ function Clientes() {
         valor={pesquisa}
         onChange={setPesquisa}
         handleClickFiltro={handleOpenModal}
+        filtroAtivo={filtroStatus.length > 0}
       />
 
       <View style={styles.listaContainer}>
