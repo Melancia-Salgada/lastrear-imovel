@@ -2,6 +2,7 @@ import HeaderSearch from "@/app/src/components/HeaderSearch";
 import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
 import React, { useEffect, useState } from "react";
 import {
+  Animated,
   Modal,
   Pressable,
   ScrollView,
@@ -18,11 +19,12 @@ import { ICorretorLista } from "@/app/src/interfaces/ICorretorLista";
 function Corretores() {
   const [modalVisible, setModalVisible] = useState(false);
   const [corretores, setCorretores] = useState<ICorretorLista[]>([]);
-  const [corretoresFiltrados, setCorretoresFiltrados] = useState<
-    ICorretorLista[]
-  >([]);
+  const [corretoresFiltrados, setCorretoresFiltrados] = useState<ICorretorLista[]>([]);
   const [pesquisa, setPesquisa] = useState("");
   const router = useRouter();
+
+  // Animação
+  const slideAnim = useState(new Animated.Value(300))[0];
 
   function handleClickNovo() {
     router.push("/src/screens/Novo");
@@ -50,8 +52,24 @@ function Corretores() {
     setCorretoresFiltrados(filtrado);
   }, [pesquisa, corretores]);
 
-  const handleOpenModal = () => setModalVisible(true);
-  const handleCloseModal = () => setModalVisible(false);
+  const handleOpenModal = () => {
+    setModalVisible(true);
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handleCloseModal = () => {
+    Animated.timing(slideAnim, {
+      toValue: 300,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setModalVisible(false);
+    });
+  };
 
   return (
     <TemplateNavScreen label="Corretores">
@@ -68,7 +86,6 @@ function Corretores() {
           {corretoresFiltrados.map((corretor, index) => (
             <Pressable onPress={handleCorretorOpen} key={index}>
               <ListinhaCorretor
-                key={index}
                 nomeCorretor={corretor.nome}
                 emailCorretor={corretor.email}
                 status={corretor.status}
@@ -79,15 +96,14 @@ function Corretores() {
       </View>
 
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={modalVisible}
         onRequestClose={handleCloseModal}
       >
         <Pressable style={styles.centeredView} onPress={handleCloseModal}>
-          <Pressable
-            style={styles.modalView}
-            onPress={(e) => e.stopPropagation()}
+          <Animated.View
+            style={[styles.modalView, { transform: [{ translateY: slideAnim }] }]}
           >
             <View style={styles.cabecalhoModal}>
               <Title style={styles.tituloModal}>Filtros</Title>
@@ -102,7 +118,7 @@ function Corretores() {
                 <Texto>Inativo</Texto>
               </TouchableOpacity>
             </View>
-          </Pressable>
+          </Animated.View>
         </Pressable>
       </Modal>
     </TemplateNavScreen>
