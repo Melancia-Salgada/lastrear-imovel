@@ -1,22 +1,27 @@
 import React from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, TextInput, View, KeyboardTypeOptions } from 'react-native'
 import { Feather } from '@expo/vector-icons'
+import Texto from '../Texto'
 
 interface InputProps {
   placeholder?: string
   type?: string
   valor: string
   onChange: (text: string) => void
+  label?: string
+  keyboardType?: KeyboardTypeOptions // <- Adicionado aqui
 }
 
-function Input({ placeholder, type, valor, onChange }: InputProps) {
+function Input({ placeholder, type, valor, onChange, label, keyboardType }: InputProps) {
   return (
     <View style={styles.container}>
+      {label && <Texto>{label}</Texto>}
       <TextInput
         value={valor}
-        onChangeText={onChange} 
+        onChangeText={onChange}
         placeholder={placeholder}
         style={styles.input}
+        keyboardType={keyboardType} // <- Aplicado aqui
       />
       {type === 'search' && (
         <Feather style={styles.lupa} name="search" size={32} color="#8D8D8D" />

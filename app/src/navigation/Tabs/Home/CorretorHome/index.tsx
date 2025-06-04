@@ -28,7 +28,7 @@ function CorretorHome() {
   return (
     <TemplateNavScreen label='Olá, Eduardo!' sublabel='Espero que tenha um ótimo dia.'>
       <Title style={styles.bold}>Seus clientes</Title>
-      <ScrollView style={styles.clientesContainer}>
+      <ScrollView style={styles.clientesContainer} showsVerticalScrollIndicator={false}>
         {clientesAtuais.map((item, index) => (
           <Pressable onPress={handleClienteOpen} key={index}>
             <Listinha

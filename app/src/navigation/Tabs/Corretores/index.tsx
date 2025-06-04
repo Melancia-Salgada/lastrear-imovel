@@ -82,7 +82,7 @@ function Corretores() {
       />
 
       <View style={styles.listaContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           {corretoresFiltrados.map((corretor, index) => (
             <Pressable onPress={handleCorretorOpen} key={index}>
               <ListinhaCorretor

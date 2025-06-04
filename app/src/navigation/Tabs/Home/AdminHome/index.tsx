@@ -53,7 +53,7 @@ function AdminHome() {
       sublabel="Espero que tenha um ótimo dia."
     >
       <Title style={styles.bold}>Clientes Recentes</Title>
-      <ScrollView style={styles.clientesContainer}>
+      <ScrollView style={styles.clientesContainer} showsVerticalScrollIndicator={false}>
   {clientesRecentes.map((item, index) => (
     <Pressable onPress={handleClienteOpen} key={index}>
       <Listinha
