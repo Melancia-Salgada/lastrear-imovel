@@ -7,7 +7,7 @@ interface ListinhaProps {
     nomeCliente: string;
     tipoImovel: string;
     nomeCorretor: string;
-    estadoNegocio: 'andamento' | 'aberto' | 'encerrado'; 
+    estadoNegocio: 'andamento' | 'aberto' | 'encerrado' | 'concluido'; 
 
 }
 
@@ -31,6 +31,9 @@ export default function Listinha({
             case 'encerrado':
                 txt='Encerrado'
                 return styles.encerrado
+            case 'concluido':
+                txt='Concluído'
+                return styles.concluido
             default:
                 break;
         }
@@ -92,6 +95,10 @@ const styles = StyleSheet.create ({
     encerrado: {
         backgroundColor: '#FFA3A3',
         borderColor:'#8F3535'
+    },
+    concluido: {
+        backgroundColor: '#87C0FF',
+        borderColor:'#46358F'
     },
 
 })
