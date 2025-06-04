@@ -18,7 +18,7 @@ function AdminHome() {
   { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
   { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", status: "encerrado", estadoImovel: "Novo" },
   { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
-  { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "andamento", estadoImovel: "Novo" },
+  { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "concluido", estadoImovel: "Novo" },
 ]
 
     setClientesRecentes(mockClientes);

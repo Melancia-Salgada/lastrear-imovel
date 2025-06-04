@@ -3,5 +3,5 @@ export interface IClienteLista {
   tipoImovel: string,
   corretor: string,
   estadoImovel: string,
-  status: 'andamento' | 'aberto' | 'encerrado';
+  status: 'andamento' | 'aberto' | 'encerrado' | 'concluido';
 }
