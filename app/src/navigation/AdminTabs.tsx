@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ajustes from './Tabs/Ajustes';
 import Clientes from './Tabs/Clientes';
 import Corretores from './Tabs/Corretores';
-import Home from "./Tabs/Home";
+import AdminHome from './Tabs/Home/AdminHome';
 
 const Tab = createBottomTabNavigator()
 
@@ -25,7 +25,7 @@ export default function AdminTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={AdminHome}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" size={32} color={color}/>

@@ -2,7 +2,7 @@ import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ajustes from './Tabs/Ajustes';
 import Clientes from './Tabs/Clientes';
-import Home from "./Tabs/Home";
+import CorretorHome from './Tabs/Home/CorretorHome';
 
 const Tab = createBottomTabNavigator()
 
@@ -24,7 +24,7 @@ export default function AdminTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={CorretorHome}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" size={32} color={color}/>
