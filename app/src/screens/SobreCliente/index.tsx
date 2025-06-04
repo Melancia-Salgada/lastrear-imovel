@@ -1,30 +1,211 @@
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import HeaderMais from '../../components/HeaderMais'
-import { useRouter } from 'expo-router'
-import { StyleSheet } from 'react-native'
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import HeaderMais from '../../components/HeaderMais';
+import { useRouter } from 'expo-router';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import Title from '../../components/Title';
+import Texto from '../../components/Texto';
+import Listinha from '../../components/ListinhaCorretor'; // Importe Listinha
 
 function SobreCliente() {
+  const router = useRouter();
 
-  const router = useRouter()
-  
   function handleClose() {
-    router.back()
+    router.back();
   }
-  
+
   return (
     <SafeAreaView style={styles.novo}>
-      
-      <HeaderMais handleClickClose={handleClose} editar/>
+      <HeaderMais handleClickClose={handleClose} editar />
+      <View style={styles.sobreClienteArea}>
+        <Title style={styles.sobreClienteNome}>
+          Gabriel Almeida Ferreira
+        </Title>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          // Adicione flexGrow: 1 para garantir que o ScrollView possa expandir
+          // se houver conteúdo insuficiente para preencher o espaço.
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          {/* Todo o conteúdo que deve rolar vai aqui */}
+          <Texto style={styles.sobreClienteLabel}>
+            Email
+          </Texto>
+          <Texto>
+            exemplo@exemplo.com
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Data de nascimento
+          </Texto>
+          <Texto>
+            99/99/9999
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            CPF
+          </Texto>
+          <Texto>
+            123.456-78
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Estado Civil
+          </Texto>
+          <Texto>
+            Souteiro
+          </Texto>
+          <View style={styles.telefoneContainer}>
+            <View style={styles.telefoneItem}>
+              <Texto style={styles.sobreClienteLabel}>
+                Telefone 1
+              </Texto>
+              <Texto>
+                123456879
+              </Texto>
+            </View>
+
+            <View style={styles.telefoneItem}>
+              <Texto style={styles.sobreClienteLabel}>
+                Telefone 2
+              </Texto>
+              <Texto>
+                123456879
+              </Texto>
+            </View>
+          </View>
+          <Texto style={styles.sobreClienteLabel}>
+            Nacionalidade
+          </Texto>
+          <Texto>
+            Brasileiro
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Escolaridade
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Title style={styles.sobreClienteFinanceiroLabel}>
+            Financeiro
+          </Title>
+          <Texto style={styles.sobreClienteLabel}>
+            Declara imposto de renda
+          </Texto>
+          <Texto>
+            Sim
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Tem compromisso financeiro no holerite?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Possui Restrição no nome ?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Tipo de Renda
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Mais de 1 mes de carteira assinada?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Renda brutal formal
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Renda brutal informal
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Recursos próprios
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Vai utilizar FGTS?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Mais de 3 anos de FGTS?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Imovel registrado no nome ?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <Texto style={styles.sobreClienteLabel}>
+            Possui algum familiar ou amigo que possa complentar a renda?
+          </Texto>
+          <Texto>
+            Faculdade
+          </Texto>
+          <View style={{ height: 10 }} />
+          <Listinha nomeCorretor={'fdasda'} emailCorretor={'sexo'} status={'ativo'} />
+          <View style={{ height: 100 }} />
+        </ScrollView>
+      </View>
     </SafeAreaView>
-  )
+  );
 }
 
-export default SobreCliente
+export default SobreCliente;
 
 const styles = StyleSheet.create({
   novo: {
     backgroundColor: '#fff',
     flex: 1
+  },
+  sobreClienteArea: {
+    // Removendo paddingHorizontal e paddingVertical daqui
+    // para que o ScrollView possa gerenciar seu próprio padding
+    flex: 1, // Faça esta View ocupar o espaço restante
+  },
+  sobreClienteNome: {
+    fontWeight: 'bold',
+    marginBottom: 15,
+    paddingHorizontal: 16, // Mova o padding horizontal para o nome do cliente
+    paddingTop: 16, // Mova o padding superior para o nome do cliente
+  },
+  scrollViewContent: {
+    paddingHorizontal: 16, // Adicione padding horizontal ao conteúdo do ScrollView
+    paddingBottom: 16, // Adicione padding inferior para evitar que o último item fique muito colado
+  },
+  sobreClienteLabel: {
+    fontWeight: 'bold',
+    marginVertical: 3
+  },
+  telefoneContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  telefoneItem: {
+    flex: 1,
+    paddingRight: 8,
+  },
+  sobreClienteFinanceiroLabel: {
+    fontWeight: 'bold',
+    marginTop: 15, // Adicione um pouco mais de espaço acima do título Financeiro
+    marginBottom: 7
   }
-})
+});
