@@ -23,11 +23,9 @@ function SobreCliente() {
         </Title>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          // Adicione flexGrow: 1 para garantir que o ScrollView possa expandir
-          // se houver conteúdo insuficiente para preencher o espaço.
           contentContainerStyle={styles.scrollViewContent}
         >
-          {/* Todo o conteúdo que deve rolar vai aqui */}
+    
           <Texto style={styles.sobreClienteLabel}>
             Email
           </Texto>
@@ -175,19 +173,18 @@ const styles = StyleSheet.create({
     flex: 1
   },
   sobreClienteArea: {
-    // Removendo paddingHorizontal e paddingVertical daqui
-    // para que o ScrollView possa gerenciar seu próprio padding
-    flex: 1, // Faça esta View ocupar o espaço restante
+    
+    flex: 1, 
   },
   sobreClienteNome: {
     fontWeight: 'bold',
     marginBottom: 15,
-    paddingHorizontal: 16, // Mova o padding horizontal para o nome do cliente
-    paddingTop: 16, // Mova o padding superior para o nome do cliente
+    paddingHorizontal: 16, 
+    paddingTop: 16, 
   },
   scrollViewContent: {
-    paddingHorizontal: 16, // Adicione padding horizontal ao conteúdo do ScrollView
-    paddingBottom: 16, // Adicione padding inferior para evitar que o último item fique muito colado
+    paddingHorizontal: 16,
+    paddingBottom: 16, 
   },
   sobreClienteLabel: {
     fontWeight: 'bold',
@@ -205,7 +202,7 @@ const styles = StyleSheet.create({
   },
   sobreClienteFinanceiroLabel: {
     fontWeight: 'bold',
-    marginTop: 15, // Adicione um pouco mais de espaço acima do título Financeiro
+    marginTop: 15, 
     marginBottom: 7
   }
 });
