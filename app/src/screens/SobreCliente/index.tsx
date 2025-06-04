@@ -15,7 +15,7 @@ function SobreCliente() {
   return (
     <SafeAreaView style={styles.novo}>
       
-      <HeaderMais handleClickClose={handleClose}/>
+      <HeaderMais handleClickClose={handleClose} editar/>
     </SafeAreaView>
   )
 }
