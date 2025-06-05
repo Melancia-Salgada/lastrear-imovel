@@ -9,7 +9,7 @@ interface InputProps {
   valor: string
   onChange: (text: string) => void
   label?: string
-  keyboardType?: KeyboardTypeOptions // <- Adicionado aqui
+  keyboardType?: KeyboardTypeOptions 
 }
 
 function Input({ placeholder, type, valor, onChange, label, keyboardType }: InputProps) {
@@ -21,7 +21,7 @@ function Input({ placeholder, type, valor, onChange, label, keyboardType }: Inpu
         onChangeText={onChange}
         placeholder={placeholder}
         style={styles.input}
-        keyboardType={keyboardType} // <- Aplicado aqui
+        keyboardType={keyboardType}
       />
       {type === 'search' && (
         <Feather style={styles.lupa} name="search" size={32} color="#8D8D8D" />

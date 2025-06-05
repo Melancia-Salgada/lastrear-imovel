@@ -2,10 +2,9 @@ import Listinha from "@/app/src/components/ListinhaCliente";
 import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
 import Title from "@/app/src/components/Title";
 import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
-import { Button, Text } from "@react-navigation/elements";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View, Text, Button } from "react-native";
 
 function AdminHome() {
   const router = useRouter();
@@ -28,11 +27,16 @@ function AdminHome() {
     router.push("/src/screens/SobreCliente");
   };
 
+  function handleaaa() {
+    router.push('/src/screens/Login'); 
+  }
+
   return (
     <TemplateNavScreen
       label="Olá, Eduardo!"
       sublabel="Espero que tenha um ótimo dia."
     >
+      
       <Title style={styles.bold}>Clientes Recentes</Title>
       <ScrollView style={styles.clientesContainer} showsVerticalScrollIndicator={false}>
   {clientesRecentes.map((item, index) => (

@@ -1,146 +1,186 @@
 // /app/blank.tsx
-import React, { useState } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Texto from '../../components/Texto';
-import Title from '../../components/Title';
+import React, { useState } from "react";
+import {
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Texto from "../../components/Texto";
+import Title from "../../components/Title";
 
 
 
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-
-
-  export default function Login() {
-
-    const [senha, setSenha] = useState(''); 
-    const [email, setEmail] = useState(''); 
+export default function Login() {
+  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState("");
 
   return (
+    <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={0} 
+          >
+            <ScrollView
+  showsVerticalScrollIndicator={false}
+  contentContainerStyle={{ flexGrow: 1 }}
+  keyboardShouldPersistTaps="handled" 
+>
+
     <View style={styles.container}>
-      <View style={styles.blocoAzul}/>
-      <Image source={require('../../../../assets/images/icon.png')} style={styles.LogoLastrear} />
+      <View style={styles.blocoAzul} />
+      
       <View style={styles.conteudo}>
-          <Title style={styles.txt1}>
-            Login
-          </Title>
-          <Texto style={styles.subtitulo}>
-            Entre com a sua conta para continuar
-          </Texto>
+        <Image
+        source={require("../../../../assets/images/icon.png")}
+        style={styles.LogoLastrear}
+        />
+        <Title style={styles.txt1}>Login</Title>
+        <Texto style={styles.subtitulo}>
+          Entre com a sua conta para continuar
+        </Texto>
 
-          <Texto style={styles.label}>
-          Email
-          </Texto>
-          <TextInput style={styles.input}
-          placeholder="seuemail@exemplo.com"
-          value={email}
-          onChangeText={text => setEmail(text)}
-          keyboardType="email-address" 
-          autoCapitalize="none"
-          />
+        <View style={styles.inputContainer}>
+          <View>
+            <Texto style={styles.label}>Email</Texto>
+            <TextInput
+              style={styles.input}
+              placeholder="seuemail@exemplo.com"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
+          <View>
+            <Texto style={styles.label}>Senha</Texto>
+            <TextInput
+              style={styles.input}
+              placeholder="Digite sua senha"
+              value={senha}
+              onChangeText={(text) => setSenha(text)}
+              secureTextEntry={true}
+              autoCapitalize="none"
+            />
+          </View>
+        </View>
 
-          <Texto style={styles.label}>
-          Senha
-          </Texto>
-          <TextInput style={styles.input}
-          placeholder="Digite sua senha"
-          value={senha}
-          onChangeText={text => setSenha(text)}
-          secureTextEntry={true}
-          autoCapitalize="none"
-          />
-        
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
-      <View style={styles.forgotPasswordContainer}>
-        <Text style={styles.forgotPasswordText}>Esqueceu a senha? </Text>
-        <TouchableOpacity onPress={() => {
-          // Adicione aqui a lógica para recuperar a senha
-          console.log('Recuperar senha pressionado');
-        }}>
-          <Texto style={styles.label}>Recuperar</Texto>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
-         
-      </View>
+        <View style={styles.forgotPasswordContainer}>
+          <Text style={styles.forgotPasswordText}>Esqueceu a senha? </Text>
+          <TouchableOpacity
+            onPress={() => {
+              console.log("Recuperar senha pressionado");
+            }}
+          >
+            <Texto style={styles.labelRec}>Recuperar</Texto>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
+    </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'column',
-    backgroundColor:'#0D559F',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "column",
+    backgroundColor: "#0D559F",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  blocoAzul:{
-    flex:1,
-    backgroundColor:'#0D559F',
-    width: windowHeight * 0.5
+  blocoAzul: {
+    flex: 1,
+    backgroundColor: "#0D559F",
+    height: 160
   },
-  conteudo:{
+  conteudo: {
     flex: 3,
-    borderTopLeftRadius:20,
-    borderTopRightRadius:20,
-    backgroundColor:'white',
-    width: windowHeight * 0.47,
-    paddingTop: windowHeight * 0.18 ,
-    paddingHorizontal: windowWidth * 0.15
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: "white",
+    paddingTop: 111,
+    paddingHorizontal: 48,
   },
-  LogoLastrear:{
-    position: 'absolute',
+
+  LogoLastrear: {
+    position: "absolute",
     zIndex: 2,
-    width: windowWidth * 0.45,
-    height: windowWidth * 0.45,
-    top:windowHeight * 0.14,
-    left:windowWidth * 0.29
+    width: 126,
+    height: 125.4,
+    top: -51,
+    alignSelf: "center",
   },
-  txt1:{
-    fontSize:40,
-    fontWeight: 'bold',
+  txt1: {
+    fontSize: 40,
+    fontWeight: "bold",
   },
-  subtitulo:{
-    paddingBottom:20,
+  subtitulo: {
+    paddingBottom: 20,
+    fontSize: 14,
   },
-  label:{
-    fontWeight: 'bold',
-    marginBottom: windowHeight * 0.01
+  label: {
+    fontWeight: "bold",
   },
-  input:{
-    width: windowWidth * 0.7,
-    height: windowHeight * 0.06,
-    backgroundColor: '#EFEFEF',
-    borderRadius: 14,
-    paddingHorizontal:windowWidth * 0.04,
-    marginBottom: windowHeight * 0.05,
+  labelRec: {
+    fontWeight: "bold",
+    color: "#0D529D",
+  },
+  input: {
+    backgroundColor: "#EFEFEF",
+    borderRadius: 12,
+    height: 58,
+    fontSize: 16,
+    paddingLeft: 20,
+    paddingRight: 60,
   },
   button: {
-    backgroundColor: '#0D559F', 
-    paddingVertical: 15,
+    marginTop: 40,
+    backgroundColor: "#0D559F",
+    paddingVertical: 20,
     paddingHorizontal: 50,
-    borderRadius: 25, 
-    marginBottom: 10, 
-    alignItems: 'center',
-    justifyContent:'center'
+    borderRadius: 16,
+    marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   forgotPasswordContainer: {
-    flexDirection: 'row', 
-    justifyContent:'center'
+    flexDirection: "row",
+    justifyContent: "center",
   },
   forgotPasswordText: {
     fontSize: 16,
-    color: '#333', 
+    color: "#333",
   },
   recoverPasswordText: {
     fontSize: 16,
-    color: '#0D559F', 
-    fontWeight: 'bold',
-  }
+    color: "#0D559F",
+    fontWeight: "bold",
+  },
+  inputContainer: {
+    flexDirection: "column",
+    gap: 28,
+  },
+  forgotPasswordContainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
