@@ -244,7 +244,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     paddingBottom: 8,
-    borderBottomWidth: 1,
     width: "100%",
     marginBottom: 22,
   },
