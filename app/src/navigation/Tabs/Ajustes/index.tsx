@@ -17,7 +17,7 @@ function Ajustes() {
         </Pressable>
         <Pressable style={[styles.buttonContainer, styles.vermelho]}>
           <FontAwesome6 name='door-closed'size={32}/>
-          <Title style={styles.texto}>Sair</Title>
+          <Title>Sair</Title>
         </Pressable>
       </View>
     </TemplateNavScreen>

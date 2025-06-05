@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderMais from "../../components/HeaderMais";
 import { useRouter } from "expo-router";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import Title from "../../components/Title";
 import Texto from "../../components/Texto";
-import Listinha from "../../components/ListinhaCorretor"; // Importe Listinha
+import Listinha from "../../components/ListinhaCorretor"; 
 
 function SobreCliente() {
   const router = useRouter();
@@ -26,7 +26,7 @@ function SobreCliente() {
     holerite: "Não",
     restricao: "Sim",
     valorRestricao: "R$ 1.200,00",
-    tipoRenda: "Mista",
+    tipoRenda: "Formal",
     rendaFormal: "R$ 3.500,00",
     rendaInformal: "R$ 1.200,00",
     tempoCarteira: "Sim",
@@ -35,9 +35,47 @@ function SobreCliente() {
     imovelNome: "Não",
   });
 
+  const handleClienteOpen = () => {
+    router.push("/src/screens/SobreCorretor");
+  };
+
   function handleClose() {
     router.back();
   }
+
+  function handleEditar() {
+  router.push({
+    pathname: "/src/screens/Editar/ClienteEdit",
+    params: {
+      nome: cliente.nome,
+      procura: cliente.procura,
+      tipoImovel: cliente.tipoImovel,
+      email: cliente.email,
+      dataNascimento: cliente.dataNascimento,
+      cpf: cliente.cpf,
+      estadoCivil: cliente.estadoCivil,
+      telefone1: cliente.telefone1,
+      telefone2: cliente.telefone2,
+      nacionalidade: cliente.nacionalidade,
+      escolaridade: cliente.escolaridade,
+      imposto: cliente.imposto,
+      holerite: cliente.holerite,
+      restricao: cliente.restricao,
+      valorRestricao: cliente.valorRestricao,
+      tipoRenda: cliente.tipoRenda,
+      rendaFormal: cliente.rendaFormal,
+      rendaInformal: cliente.rendaInformal,
+      tempoCarteira: cliente.tempoCarteira,
+      usarFgts: cliente.usarFgts,
+      anoFgts: cliente.anoFgts,
+      imovelNome: cliente.imovelNome
+    },
+  });
+}
+
+const [corretor, setCorretor] =  useState({ nome: "Eduardo", email: "eduardo@imobiliaria.com", status: "ativo" })
+
+
 
   let txt = ''
 
@@ -62,7 +100,7 @@ function SobreCliente() {
 
   return (
     <SafeAreaView style={styles.novo}>
-      <HeaderMais handleClickClose={handleClose} editar />
+      <HeaderMais handleClickClose={handleClose} editar handleClickEdit={handleEditar} />
       <View style={styles.sobreClienteArea}>
         <View style={styles.titulo}>
           <Title style={styles.sobreClienteNome}>{cliente.nome}</Title>
@@ -223,11 +261,13 @@ function SobreCliente() {
             </View>
           </View>
           <View style={{ height: 10 }} />
+          <Pressable onPress={handleClienteOpen} >
           <Listinha
-            nomeCorretor={"fdasda"}
-            emailCorretor={"sexo"}
-            status={"ativo"}
+            nomeCorretor={corretor.nome}
+            emailCorretor={corretor.email}
+            status={corretor.status}
           />
+          </Pressable>
           <View style={{ height: 100 }} />
         </ScrollView>
       </View>

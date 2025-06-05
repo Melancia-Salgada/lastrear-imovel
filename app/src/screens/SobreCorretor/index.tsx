@@ -119,6 +119,21 @@ function SobreCorretor() {
     router.back();
   }
 
+  function handleClickEdit() {
+  router.push({
+    pathname: "/src/screens/Editar/CorretorEdit",
+    params: {
+      nome: corretor.nome,
+      email: corretor.email,
+      telefone: corretor.telefone,
+      cpf: corretor.cpf,
+      nascimento: corretor.dataNascimento,
+      especialidade: corretor.especialidade,
+    },
+  });
+}
+
+
   const handleOpenModal = () => {
     setModalVisible(true);
     Animated.timing(slideAnim, {
@@ -159,10 +174,11 @@ function SobreCorretor() {
 
   return (
     <SafeAreaView style={styles.novo}>
-      <HeaderMais handleClickClose={handleClose} editar />
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <HeaderMais handleClickClose={handleClose} editar handleClickEdit={handleClickEdit} />
 
       {/* Dados do corretor fixos na tela */}
-      <View style={styles.conteudoFixo}>
+      <View>
         <View style={styles.titulo}>
           <Title style={styles.sobreClienteNome}>{corretor.nome}</Title>
           <View style={[styles.estado, checkStatus()]}>
@@ -295,6 +311,7 @@ function SobreCorretor() {
           </Animated.View>
         </Pressable>
       </Modal>
+      </ScrollView>
     </SafeAreaView>
   );
 }

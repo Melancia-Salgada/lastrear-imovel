@@ -186,7 +186,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   filtroCaixa: {
-    borderWidth: 1,
     borderColor: "#9C9797",
     borderRadius: 12,
     padding: 6,
