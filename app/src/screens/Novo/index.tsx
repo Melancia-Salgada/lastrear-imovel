@@ -39,7 +39,7 @@ function Novo() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0} 
       >
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           
           <Title style={styles.txtNovo}>Novo Corretor</Title>
           <View style={styles.container}>
