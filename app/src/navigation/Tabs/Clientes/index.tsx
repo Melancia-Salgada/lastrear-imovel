@@ -20,7 +20,9 @@ import { useRouter } from "expo-router";
 function Clientes() {
   const [modalVisible, setModalVisible] = useState(false);
   const [clientes, setClientes] = useState<IClienteLista[]>([]);
-  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>([]);
+  const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>(
+    []
+  );
   const [pesquisa, setPesquisa] = useState("");
 
   const [filtroStatus, setFiltroStatus] = useState<string[]>([]);
@@ -32,11 +34,41 @@ function Clientes() {
 
   useEffect(() => {
     const mockClientes: IClienteLista[] = [
-      { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", status: "andamento", estadoImovel: "Novo" },
-      { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
-      { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", status: "encerrado", estadoImovel: "Novo" },
-      { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
-      { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "andamento", estadoImovel: "Novo" },
+      {
+        nome: "João",
+        tipoImovel: "Apartamento",
+        corretor: "Maria",
+        status: "andamento",
+        estadoImovel: "Novo",
+      },
+      {
+        nome: "Ana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        status: "aberto",
+        estadoImovel: "Usado",
+      },
+      {
+        nome: "Bruno",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        status: "encerrado",
+        estadoImovel: "Novo",
+      },
+      {
+        nome: "Mariana",
+        tipoImovel: "Casa",
+        corretor: "Carlos",
+        status: "aberto",
+        estadoImovel: "Usado",
+      },
+      {
+        nome: "Fernanda",
+        tipoImovel: "Apartamento",
+        corretor: "Carlos",
+        status: "andamento",
+        estadoImovel: "Novo",
+      },
     ];
     setClientes(mockClientes);
     setClientesFiltrados(mockClientes);
@@ -46,9 +78,14 @@ function Clientes() {
     const termo = pesquisa.toLowerCase();
     const filtrado = clientes.filter((cliente) => {
       const nomeOk = cliente.nome.toLowerCase().includes(termo);
-      const statusOk = filtroStatus.length > 0 ? filtroStatus.includes(cliente.status) : true;
-      const tipoOk = filtroTipo.length > 0 ? filtroTipo.includes(cliente.tipoImovel) : true;
-      const estadoOk = filtroEstado.length > 0 ? filtroEstado.includes(cliente.estadoImovel) : true;
+      const statusOk =
+        filtroStatus.length > 0 ? filtroStatus.includes(cliente.status) : true;
+      const tipoOk =
+        filtroTipo.length > 0 ? filtroTipo.includes(cliente.tipoImovel) : true;
+      const estadoOk =
+        filtroEstado.length > 0
+          ? filtroEstado.includes(cliente.estadoImovel)
+          : true;
       return nomeOk && statusOk && tipoOk && estadoOk;
     });
     setClientesFiltrados(filtrado);
@@ -95,7 +132,11 @@ function Clientes() {
         valor={pesquisa}
         onChange={setPesquisa}
         handleClickFiltro={handleOpenModal}
-        filtroAtivo={filtroStatus.length > 0}
+        filtroAtivo={
+          filtroStatus.length > 0 ||
+          filtroTipo.length > 0 ||
+          filtroEstado.length > 0
+        }
       />
 
       <View style={styles.listaContainer}>
@@ -137,7 +178,9 @@ function Clientes() {
                 {["andamento", "aberto", "encerrado"].map((status) => (
                   <TouchableOpacity
                     key={status}
-                    onPress={() => toggleFiltro(status, filtroStatus, setFiltroStatus)}
+                    onPress={() =>
+                      toggleFiltro(status, filtroStatus, setFiltroStatus)
+                    }
                     style={[
                       styles.filtroCaixa,
                       filtroStatus.includes(status) && styles.filtroSelecionado,
@@ -157,7 +200,9 @@ function Clientes() {
                 {["Apartamento", "Casa"].map((tipo) => (
                   <TouchableOpacity
                     key={tipo}
-                    onPress={() => toggleFiltro(tipo, filtroTipo, setFiltroTipo)}
+                    onPress={() =>
+                      toggleFiltro(tipo, filtroTipo, setFiltroTipo)
+                    }
                     style={[
                       styles.filtroCaixa,
                       filtroTipo.includes(tipo) && styles.filtroSelecionado,
@@ -173,7 +218,9 @@ function Clientes() {
                 {["Novo", "Usado"].map((estado) => (
                   <TouchableOpacity
                     key={estado}
-                    onPress={() => toggleFiltro(estado, filtroEstado, setFiltroEstado)}
+                    onPress={() =>
+                      toggleFiltro(estado, filtroEstado, setFiltroEstado)
+                    }
                     style={[
                       styles.filtroCaixa,
                       filtroEstado.includes(estado) && styles.filtroSelecionado,
@@ -184,6 +231,11 @@ function Clientes() {
                 ))}
               </View>
             </View>
+            <TouchableOpacity onPress={handleCloseModal}>
+    <Texto style={[ { color: "red", marginTop: 20 }]}>
+      Cancelar
+    </Texto>
+  </TouchableOpacity>
           </Animated.View>
         </Pressable>
       </Modal>

@@ -137,7 +137,13 @@ function Corretores() {
                 </TouchableOpacity>
               ))}
             </View>
+            <TouchableOpacity onPress={handleCloseModal}>
+    <Texto style={[ { color: "red", marginTop: 20 }]}>
+      Cancelar
+    </Texto>
+  </TouchableOpacity>
           </Animated.View>
+          
         </Pressable>
       </Modal>
     </TemplateNavScreen>
@@ -170,7 +176,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     paddingBottom: 8,
-    borderBottomWidth: 1,
     width: "100%",
     marginBottom: 22,
   },
@@ -192,9 +197,11 @@ const styles = StyleSheet.create({
     marginRight: 12,
     backgroundColor: "#efefef",
     marginBottom: 7,
+    borderWidth: 1,
   },
   filtroSelecionado: {
-    backgroundColor: "#B9D9B7", 
+    backgroundColor: "#B9D9B7",
     borderColor: "#6C8664",
-  },
+  }
+
 });
