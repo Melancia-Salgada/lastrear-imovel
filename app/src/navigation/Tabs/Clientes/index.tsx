@@ -16,6 +16,8 @@ import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
 import HeaderSearch from "@/app/src/components/HeaderSearch";
 import Title from "@/app/src/components/Title";
 import { useRouter } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 function Clientes() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,47 +34,31 @@ function Clientes() {
   const router = useRouter();
   const slideAnim = useState(new Animated.Value(300))[0];
 
-  useEffect(() => {
-    const mockClientes: IClienteLista[] = [
-      {
-        nome: "João",
-        tipoImovel: "Apartamento",
-        corretor: "Maria",
-        status: "andamento",
-        estadoImovel: "Novo",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        status: "aberto",
-        estadoImovel: "Usado",
-      },
-      {
-        nome: "Bruno",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        status: "encerrado",
-        estadoImovel: "Novo",
-      },
-      {
-        nome: "Mariana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        status: "aberto",
-        estadoImovel: "Usado",
-      },
-      {
-        nome: "Fernanda",
-        tipoImovel: "Apartamento",
-        corretor: "Carlos",
-        status: "andamento",
-        estadoImovel: "Novo",
-      },
-    ];
-    setClientes(mockClientes);
-    setClientesFiltrados(mockClientes);
-  }, []);
+  const fetchClientes = async () => {
+    try {
+      const response = await fetch("http://192.168.15.18:8080/registros");
+      const data = await response.json();
+
+      const adaptado: IClienteLista[] = data.map((registro: any) => ({
+        nome: registro.participante1?.nome || "Sem nome",
+        tipoImovel: registro.procura.toLowerCase() || "Desconhecido",
+        estadoImovel: registro.tipo.toLowerCase() || "Desconhecido",
+        status: registro.participante1?.status?.toLowerCase() || "aberto",
+        corretor: "Desconhecido",
+      }));
+
+      setClientes(adaptado);
+      setClientesFiltrados(adaptado);
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchClientes();
+    }, [])
+  );
 
   useEffect(() => {
     const termo = pesquisa.toLowerCase();
@@ -81,11 +67,17 @@ function Clientes() {
       const statusOk =
         filtroStatus.length > 0 ? filtroStatus.includes(cliente.status) : true;
       const tipoOk =
-        filtroTipo.length > 0 ? filtroTipo.includes(cliente.tipoImovel) : true;
+        filtroTipo.length > 0
+          ? filtroTipo.map((f) => f.toLowerCase()).includes(cliente.tipoImovel)
+          : true;
+
       const estadoOk =
         filtroEstado.length > 0
-          ? filtroEstado.includes(cliente.estadoImovel)
+          ? filtroEstado
+              .map((f) => f.toLowerCase())
+              .includes(cliente.estadoImovel)
           : true;
+
       return nomeOk && statusOk && tipoOk && estadoOk;
     });
     setClientesFiltrados(filtrado);
@@ -232,10 +224,8 @@ function Clientes() {
               </View>
             </View>
             <TouchableOpacity onPress={handleCloseModal}>
-    <Texto style={[ { color: "red", marginTop: 20 }]}>
-      Cancelar
-    </Texto>
-  </TouchableOpacity>
+              <Texto style={[{ color: "red", marginTop: 20 }]}>Cancelar</Texto>
+            </TouchableOpacity>
           </Animated.View>
         </Pressable>
       </Modal>
