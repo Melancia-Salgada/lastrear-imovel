@@ -27,9 +27,54 @@ function Novo() {
     router.back()
   }
 
-  function handleCriar() {
+  function formatarDataNascimento(data: string) {
+  const [dia, mes, ano] = data.split('/')
+  return `${ano}-${mes}-${dia}`
+}
 
+async function handleCriar() {
+  if (!nomeCompleto || !email || !telefone) {
+    alert('Preencha os campos obrigatórios (*)')
+    return
   }
+
+  const payload = {
+    nomeCompleto,
+    email,
+    telefone,
+    cpf,
+    dataNascimento: nascimento ? formatarDataNascimento(nascimento) : null,
+    especialidade,
+    username: email,
+    password: '123456', 
+    status: 'ATIVO',
+    role: 'CORRETOR'
+  }
+
+  try {
+    const response = await fetch('http://192.168.15.18:8080/corretores', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error('Erro ao criar corretor:', errorData)
+      alert('Erro ao criar corretor.')
+      return
+    }
+
+    alert('Corretor criado com sucesso!')
+    router.back()
+  } catch (error) {
+    console.error('Erro na requisição:', error)
+    alert('Erro ao criar corretor.')
+  }
+}
+
 
   return (
     <SafeAreaView style={styles.novo}>

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderMais from "../../components/HeaderMais";
 import { useRouter } from "expo-router";
@@ -6,34 +5,29 @@ import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import Title from "../../components/Title";
 import Texto from "../../components/Texto";
 import Listinha from "../../components/ListinhaCorretor"; 
+import { IRegistro } from "../../interfaces/ICliente";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "expo-router/build/hooks";
 
 function SobreCliente() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id") ?? "";
+
+
+  const [registro, setRegistro] = useState<IRegistro | null>(null);
+  const [corretor, setCorretor] = useState({ nome: "Eduardo", email: "eduardo@imobiliaria.com", status: "ativo" });
   const router = useRouter();
-  const [cliente, setCliente] = useState({
-    status: 'concluido',
-    nome: "Gabriel Almeida",
-    procura: "Apartamento",
-    tipoImovel: "Novo",
-    email: "gabriel@email.com",
-    dataNascimento: "10/05/2004",
-    cpf: "123.456.789-00",
-    estadoCivil: "Solteiro",
-    telefone1: "(11) 91234-5678",
-    telefone2: "(11) 99876-5432",
-    nacionalidade: "Brasileiro",
-    escolaridade: "Ensino Superior Completo",
-    imposto: "Sim",
-    holerite: "Não",
-    restricao: "Sim",
-    valorRestricao: "R$ 1.200,00",
-    tipoRenda: "Formal",
-    rendaFormal: "R$ 3.500,00",
-    rendaInformal: "R$ 1.200,00",
-    tempoCarteira: "Sim",
-    usarFgts: "Sim",
-    anoFgts: "Sim",
-    imovelNome: "Não",
-  });
+
+  useEffect(() => {
+    if (!id) return;
+    fetch(`http://192.168.15.18:8080/registros/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Erro ao carregar registro");
+        return res.json();
+      })
+      .then((data: IRegistro) => setRegistro(data))
+      .catch(err => console.error(err));
+  }, [id]);
 
   const handleClienteOpen = () => {
     router.push("/src/screens/SobreCorretor");
@@ -44,229 +38,187 @@ function SobreCliente() {
   }
 
   function handleEditar() {
-  router.push({
-    pathname: "/src/screens/Editar/ClienteEdit",
-    params: {
-      nome: cliente.nome,
-      procura: cliente.procura,
-      tipoImovel: cliente.tipoImovel,
-      email: cliente.email,
-      dataNascimento: cliente.dataNascimento,
-      cpf: cliente.cpf,
-      estadoCivil: cliente.estadoCivil,
-      telefone1: cliente.telefone1,
-      telefone2: cliente.telefone2,
-      nacionalidade: cliente.nacionalidade,
-      escolaridade: cliente.escolaridade,
-      imposto: cliente.imposto,
-      holerite: cliente.holerite,
-      restricao: cliente.restricao,
-      valorRestricao: cliente.valorRestricao,
-      tipoRenda: cliente.tipoRenda,
-      rendaFormal: cliente.rendaFormal,
-      rendaInformal: cliente.rendaInformal,
-      tempoCarteira: cliente.tempoCarteira,
-      usarFgts: cliente.usarFgts,
-      anoFgts: cliente.anoFgts,
-      imovelNome: cliente.imovelNome
-    },
-  });
-}
+    if (!registro) return;
 
-const [corretor, setCorretor] =  useState({ nome: "Eduardo", email: "eduardo@imobiliaria.com", status: "ativo" })
+    const participante1 = registro.participante1;
 
+    router.push({
+      pathname: "/src/screens/Editar/ClienteEdit",
+      params: {
+        nome: participante1.nome,
+        procura: registro.procura,
+        tipoImovel: registro.tipo,
+        email: participante1.email,
+        dataNascimento: participante1.dataNascimento,
+        cpf: participante1.cpf,
+        estadoCivil: participante1.estadoCivil,
+        telefone1: participante1.telefone1,
+        telefone2: participante1.telefone2,
+        imposto: participante1.declaraIRPF ? "Sim" : "Não",
+        holerite: participante1.compromissoHolerite ? "Sim" : "Não",
+        restricao: participante1.restricaoNoNome ? "Sim" : "Não",
+        valorRestricao: participante1.valorRestricao,
+        tipoRenda: participante1.tipoDeRenda,
+        rendaFormal: participante1.rendaBrutaFormal,
+        rendaInformal: participante1.rendaBrutaInformal,
+        tempoCarteira: participante1.umMesDeCarteiraAssinada ? "Sim" : "Não",
+        usarFgts: participante1.vaiUtilizarFgts ? "Sim" : "Não",
+        anoFgts: participante1.tresAnosFgts ? "Sim" : "Não",
+        imovelNome: participante1.possuiImovelRegistradoNoNome ? "Sim" : "Não",
+      },
+    });
+  }
 
-
-  let txt = ''
-
-  function checkStatus() {
-        switch (cliente.status) {
-            case 'andamento':
-                txt='Em andamento'
-                return styles.andamento
-            case 'aberto':
-                txt='Em aberto'
-                return styles.aberto
-            case 'encerrado':
-                txt='Encerrado'
-                return styles.encerrado
-            case 'concluido':
-                txt='Concluído'
-                return styles.concluido
-            default:
-                break;
-        }
+  function getStatus() {
+    switch (registro?.participante1.status.toLocaleLowerCase()) {
+      case "andamento":
+        return { texto: "Em andamento", style: styles.andamento };
+      case "aberto":
+        return { texto: "Em aberto", style: styles.aberto };
+      case "encerrado":
+        return { texto: "Encerrado", style: styles.encerrado };
+      case "concluido":
+        return { texto: "Concluído", style: styles.concluido };
+      default:
+        return { texto: "", style: {} };
     }
+  }
+
+  const { texto, style } = getStatus();
 
   return (
     <SafeAreaView style={styles.novo}>
       <HeaderMais handleClickClose={handleClose} editar handleClickEdit={handleEditar} />
       <View style={styles.sobreClienteArea}>
         <View style={styles.titulo}>
-          <Title style={styles.sobreClienteNome}>{cliente.nome}</Title>
-        <View style={[styles.estado, checkStatus()]}>
-                    <Texto>{txt}</Texto>
-                </View>
+          <Title style={styles.sobreClienteNome}>{registro?.participante1.nome}</Title>
+          <View style={[styles.estado, style]}>
+            <Texto>{texto}</Texto>
+          </View>
         </View>
-        
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollViewContent}
-        >
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.dataContainer}>
-            
             <View style={styles.telefoneContainer}>
               <View style={styles.telefoneItem}>
                 <Texto style={styles.sobreClienteLabel}>Procura</Texto>
-                <Texto>{cliente.procura}</Texto>
+                <Texto>{registro?.procura}</Texto>
               </View>
 
               <View style={styles.telefoneItem}>
                 <Texto style={styles.sobreClienteLabel}>Tipo</Texto>
-                <Texto>{cliente.tipoImovel}</Texto>
+                <Texto>{registro?.tipo}</Texto>
               </View>
             </View>
             <View>
               <Texto style={styles.sobreClienteLabel}>Email</Texto>
-              <Texto>{cliente.email}</Texto>
+              <Texto>{registro?.participante1.email}</Texto>
             </View>
 
             <View>
               <Texto style={styles.sobreClienteLabel}>Data de nascimento</Texto>
-              <Texto>{cliente.dataNascimento}</Texto>
+              <Texto>{registro?.participante1.dataNascimento}</Texto>
             </View>
 
             <View>
               <Texto style={styles.sobreClienteLabel}>CPF</Texto>
-              <Texto>{cliente.cpf}</Texto>
+              <Texto>{registro?.participante1.cpf}</Texto>
             </View>
 
             <View>
               <Texto style={styles.sobreClienteLabel}>Estado Civil</Texto>
-              <Texto>{cliente.estadoCivil}</Texto>
+              <Texto>{registro?.participante1.estadoCivil}</Texto>
             </View>
 
             <View style={styles.telefoneContainer}>
               <View style={styles.telefoneItem}>
                 <Texto style={styles.sobreClienteLabel}>Telefone 1</Texto>
-                <Texto>{cliente.telefone1}</Texto>
+                <Texto>{registro?.participante1.telefone1}</Texto>
               </View>
 
               <View style={styles.telefoneItem}>
                 <Texto style={styles.sobreClienteLabel}>Telefone 2</Texto>
-                <Texto>{cliente.telefone2}</Texto>
+                <Texto>{registro?.participante1.telefone2}</Texto>
               </View>
-            </View>
-
-            <View>
-              <Texto style={styles.sobreClienteLabel}>Nacionalidade</Texto>
-              <Texto>{cliente.nacionalidade}</Texto>
-            </View>
-            <View>
-              <Texto style={styles.sobreClienteLabel}>Escolaridade</Texto>
-              <Texto>{cliente.escolaridade}</Texto>
             </View>
 
             <Title style={styles.sobreClienteFinanceiroLabel}>Financeiro</Title>
 
             <View>
-              <Texto style={styles.sobreClienteLabel}>
-                Declara imposto de renda
-              </Texto>
-              <Texto>{cliente.imposto}</Texto>
+              <Texto style={styles.sobreClienteLabel}>Declara imposto de renda</Texto>
+              <Texto>{registro?.participante1.declaraIRPF ? "Sim" : "Não"}</Texto>
             </View>
 
             <View>
-              <Texto style={styles.sobreClienteLabel}>
-                Tem compromisso financeiro no holerite?
-              </Texto>
-              <Texto>{cliente.holerite}</Texto>
+              <Texto style={styles.sobreClienteLabel}>Tem compromisso financeiro no holerite?</Texto>
+              <Texto>{registro?.participante1.compromissoHolerite ? "Sim" : "Não"}</Texto>
             </View>
 
             <View>
-              <Texto style={styles.sobreClienteLabel}>
-                Possui Restrição no nome ?
-              </Texto>
-              <Texto>{cliente.restricao}</Texto>
+              <Texto style={styles.sobreClienteLabel}>Possui Restrição no nome?</Texto>
+              <Texto>{registro?.participante1.restricaoNoNome ? "Sim" : "Não"}</Texto>
             </View>
 
-            {cliente.valorRestricao && (
+            {registro?.participante1.valorRestricao && (
               <View>
-                <Texto style={styles.sobreClienteLabel}>
-                  Possui Restrição no nome ?
-                </Texto>
-                <Texto>{cliente.valorRestricao}</Texto>
+                <Texto style={styles.sobreClienteLabel}>Valor da restrição</Texto>
+                <Texto>{registro?.participante1.valorRestricao}</Texto>
               </View>
             )}
 
             <View>
               <Texto style={styles.sobreClienteLabel}>Tipo de Renda</Texto>
-              <Texto>{cliente.tipoRenda}</Texto>
+              <Texto>{registro?.participante1.tipoDeRenda}</Texto>
             </View>
 
-            {cliente.rendaFormal && (
+            {registro?.participante1.rendaBrutaFormal && (
               <View>
-                <Texto style={styles.sobreClienteLabel}>
-                  Renda brutal formal
-                </Texto>
-                <Texto>{cliente.rendaFormal}</Texto>
+                <Texto style={styles.sobreClienteLabel}>Renda bruta formal</Texto>
+                <Texto>{registro?.participante1.rendaBrutaFormal}</Texto>
               </View>
             )}
 
-            {cliente.rendaInformal && (
+            {registro?.participante1.rendaBrutaInformal && (
               <View>
-                <Texto style={styles.sobreClienteLabel}>
-                  Renda brutal informal
-                </Texto>
-                <Texto>{cliente.rendaInformal}</Texto>
+                <Texto style={styles.sobreClienteLabel}>Renda bruta informal</Texto>
+                <Texto>{registro?.participante1.rendaBrutaInformal}</Texto>
               </View>
             )}
 
-            {cliente.rendaInformal && (
+            {registro?.participante1.rendaBrutaInformal && (
               <View>
-                <Texto style={styles.sobreClienteLabel}>
-                  Mais de 1 mes de carteira assinada?
-                </Texto>
-                <Texto>{cliente.tempoCarteira}</Texto>
+                <Texto style={styles.sobreClienteLabel}>Mais de 1 mês de carteira assinada?</Texto>
+                <Texto>{registro?.participante1.umMesDeCarteiraAssinada ? "Sim" : "Não"}</Texto>
               </View>
             )}
 
             <View>
               <Texto style={styles.sobreClienteLabel}>Vai utilizar FGTS?</Texto>
-              <Texto>{cliente.usarFgts}</Texto>
+              <Texto>{registro?.participante1.vaiUtilizarFgts ? "Sim" : "Não"}</Texto>
             </View>
 
-            {cliente.anoFgts && (
+            {registro?.participante1.tresAnosFgts && (
               <View>
-                <Texto style={styles.sobreClienteLabel}>
-                  Mais de 3 anos de FGTS?
-                </Texto>
-                <Texto>{cliente.anoFgts}</Texto>
+                <Texto style={styles.sobreClienteLabel}>Mais de 3 anos de FGTS?</Texto>
+                <Texto>{registro?.participante1.tresAnosFgts ? "Sim" : "Não"}</Texto>
               </View>
             )}
 
             <View>
-              <Texto style={styles.sobreClienteLabel}>
-                Imovel registrado no nome ?
-              </Texto>
-              <Texto>{cliente.imovelNome}</Texto>
+              <Texto style={styles.sobreClienteLabel}>Imóvel registrado no nome?</Texto>
+              <Texto>{registro?.participante1.possuiImovelRegistradoNoNome ? "Sim" : "Não"}</Texto>
             </View>
 
             <View>
               <Texto style={styles.sobreClienteLabel}>
-                Possui algum familiar ou amigo que possa complentar a renda?
+                Possui algum familiar ou amigo que possa complementar a renda?
               </Texto>
               <Texto>Faculdade</Texto>
             </View>
           </View>
           <View style={{ height: 10 }} />
-          <Pressable onPress={handleClienteOpen} >
-          <Listinha
-            nomeCorretor={corretor.nome}
-            emailCorretor={corretor.email}
-            status={corretor.status}
-          />
+          <Pressable onPress={handleClienteOpen}>
+            <Listinha nomeCorretor={corretor.nome} emailCorretor={corretor.email} status={corretor.status} />
           </Pressable>
           <View style={{ height: 100 }} />
         </ScrollView>
@@ -274,6 +226,7 @@ const [corretor, setCorretor] =  useState({ nome: "Eduardo", email: "eduardo@imo
     </SafeAreaView>
   );
 }
+
 
 export default SobreCliente;
 

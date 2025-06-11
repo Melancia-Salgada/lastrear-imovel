@@ -4,54 +4,59 @@ import Title from "@/app/src/components/Title";
 import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View, Text, Button } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 function AdminHome() {
   const router = useRouter();
-
   const [clientesRecentes, setClientesRecentes] = useState<IClienteLista[]>([]);
 
-  useEffect(() => {
-    const mockClientes: IClienteLista[] = [
-  { nome: "João", tipoImovel: "Apartamento", corretor: "Maria", status: "andamento", estadoImovel: "Novo" },
-  { nome: "Ana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
-  { nome: "Bruno", tipoImovel: "Casa", corretor: "Carlos", status: "encerrado", estadoImovel: "Novo" },
-  { nome: "Mariana", tipoImovel: "Casa", corretor: "Carlos", status: "aberto", estadoImovel: "Usado" },
-  { nome: "Fernanda", tipoImovel: "Apartamento", corretor: "Carlos", status: "concluido", estadoImovel: "Novo" },
-]
+  const fetchClientes = async () => {
+    try {
+      const response = await fetch("http://192.168.15.18:8080/registros");
+      const data = await response.json();
 
-    setClientesRecentes(mockClientes);
-  }, []);
+      const adaptado: IClienteLista[] = data.map((registro: any) => ({
+        id: registro.id || crypto.randomUUID(),
+        nome: registro.participante1?.nome || "Sem nome",
+        tipoImovel: (registro.procura || "Desconhecido").toLowerCase(),
+        estadoImovel: (registro.tipo || "Desconhecido").toLowerCase(),
+        status: (registro.participante1?.status || "aberto").toLowerCase(),
+        corretor: "Desconhecido",
+      })).reverse();;
 
-  const handleClienteOpen = () => {
-    router.push("/src/screens/SobreCliente");
+      setClientesRecentes(adaptado.slice(0, 5));  
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+    }
   };
 
-  function handleaaa() {
-    router.push('/src/screens/Login'); 
-  }
+  useEffect(() => {
+    fetchClientes();
+  }, []);
+
+  const handleClienteOpen = (id: string) => {
+    router.push({ pathname: "/src/screens/SobreCliente", params: { id } });
+  };
 
   return (
     <TemplateNavScreen
       label="Olá, Eduardo!"
       sublabel="Espero que tenha um ótimo dia."
     >
-      
       <Title style={styles.bold}>Clientes Recentes</Title>
       <ScrollView style={styles.clientesContainer} showsVerticalScrollIndicator={false}>
-  {clientesRecentes.map((item, index) => (
-    <Pressable onPress={handleClienteOpen} key={index}>
-      <Listinha
-        nomeCliente={item.nome}
-        tipoImovel={item.tipoImovel}
-        nomeCorretor={item.corretor}
-        status={item.status}
-        estadoImovel={item.estadoImovel}
-      />
-    </Pressable>
-  ))}
-</ScrollView>
-
+        {clientesRecentes.map((item) => (
+          <Pressable onPress={() => handleClienteOpen(item.id)} key={item.id}>
+            <Listinha
+              nomeCliente={item.nome}
+              tipoImovel={item.tipoImovel}
+              nomeCorretor={item.corretor}
+              status={item.status}
+              estadoImovel={item.estadoImovel}
+            />
+          </Pressable>
+        ))}
+      </ScrollView>
     </TemplateNavScreen>
   );
 }
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   clientesContainer: {
-    marginTop: 10,
+    marginTop: 12,
     paddingBottom: 60,
   },
 });

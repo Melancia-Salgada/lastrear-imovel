@@ -35,14 +35,27 @@ function Corretores() {
   };
 
   useEffect(() => {
-    const mockCorretores: ICorretorLista[] = [
-      { nome: "Ana Silva", email: "ana@imobiliaria.com", status: "ativo" },
-      { nome: "Carlos Souza", email: "carlos@imob.com", status: "inativo" },
-      { nome: "Beatriz Lima", email: "bia@vendas.com", status: "ativo" },
-    ];
-    setCorretores(mockCorretores);
-    setCorretoresFiltrados(mockCorretores);
-  }, []);
+  async function fetchCorretores() {
+    try {
+      const resposta = await fetch("http://192.168.15.18:8080/corretores"); // troque pela URL real
+      const data = await resposta.json();
+
+      const adaptado: ICorretorLista[] = data.map((corretor: any) => ({
+        nome: corretor.nomeCompleto || "Sem nome",
+        email: corretor.email || "Sem email",
+        status: (corretor.status || "INATIVO").toLowerCase(),
+      })).reverse(); 
+
+      setCorretores(adaptado);
+      setCorretoresFiltrados(adaptado);
+    } catch (error) {
+      console.error("Erro ao buscar corretores:", error);
+    }
+  }
+
+  fetchCorretores();
+}, []);
+
 
   useEffect(() => {
     const termo = pesquisa.toLowerCase();

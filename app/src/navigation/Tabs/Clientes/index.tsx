@@ -40,12 +40,13 @@ function Clientes() {
       const data = await response.json();
 
       const adaptado: IClienteLista[] = data.map((registro: any) => ({
+        id: registro.id || crypto.randomUUID(),
         nome: registro.participante1?.nome || "Sem nome",
-        tipoImovel: registro.procura.toLowerCase() || "Desconhecido",
-        estadoImovel: registro.tipo.toLowerCase() || "Desconhecido",
-        status: registro.participante1?.status?.toLowerCase() || "aberto",
+        tipoImovel: (registro.procura || "Desconhecido").toLowerCase(),
+        estadoImovel: (registro.tipo || "Desconhecido").toLowerCase(),
+        status: (registro.participante1?.status || "aberto").toLowerCase(),
         corretor: "Desconhecido",
-      }));
+      })).reverse();
 
       setClientes(adaptado);
       setClientesFiltrados(adaptado);
@@ -114,10 +115,6 @@ function Clientes() {
     }
   };
 
-  const handleClienteOpen = () => {
-    router.push("/src/screens/SobreCliente");
-  };
-
   return (
     <TemplateNavScreen label="Clientes">
       <HeaderSearch
@@ -133,8 +130,8 @@ function Clientes() {
 
       <View style={styles.listaContainer}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {clientesFiltrados.map((item, index) => (
-            <Pressable onPress={handleClienteOpen} key={index}>
+          {clientesFiltrados.map((item) => (
+            <Pressable onPress={() => router.push({ pathname: '/src/screens/SobreCliente', params: { id: item.id } })} key={item.id}>
               <Listinha
                 nomeCliente={item.nome}
                 tipoImovel={item.tipoImovel}
