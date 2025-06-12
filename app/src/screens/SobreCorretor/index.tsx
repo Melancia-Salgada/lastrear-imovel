@@ -16,9 +16,13 @@ import Texto from "../../components/Texto";
 import HeaderSearch from "../../components/HeaderSearch";
 import Listinha from "../../components/ListinhaCliente";
 import { IClienteLista } from "../../interfaces/IClienteLista";
+import { useSearchParams } from "expo-router/build/hooks";
+import { ICorretor } from "../../interfaces/ICorretor";
 
 function SobreCorretor() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+    const id = searchParams.get("id") ?? "";
 
   const [clientes, setClientes] = useState<IClienteLista[]>([]);
   const [clientesFiltrados, setClientesFiltrados] = useState<IClienteLista[]>(
@@ -32,6 +36,7 @@ function SobreCorretor() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const slideAnim = useState(new Animated.Value(300))[0];
+  const [corretor, setCorretor] = useState<ICorretor | null>(null);
 
   const toggleFiltro = (
     valor: string,
@@ -46,46 +51,15 @@ function SobreCorretor() {
   };
 
   useEffect(() => {
-    const mockClientes: IClienteLista[] = [
-      {
-        nome: "João",
-        tipoImovel: "Apartamento",
-        corretor: "Maria",
-        status: "andamento",
-        estadoImovel: "Novo",
-      },
-      {
-        nome: "Ana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        status: "aberto",
-        estadoImovel: "Usado",
-      },
-      {
-        nome: "Bruno",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        status: "encerrado",
-        estadoImovel: "Novo",
-      },
-      {
-        nome: "Mariana",
-        tipoImovel: "Casa",
-        corretor: "Carlos",
-        status: "aberto",
-        estadoImovel: "Usado",
-      },
-      {
-        nome: "Fernanda",
-        tipoImovel: "Apartamento",
-        corretor: "Carlos",
-        status: "andamento",
-        estadoImovel: "Novo",
-      },
-    ];
-    setClientes(mockClientes);
-    setClientesFiltrados(mockClientes);
-  }, []);
+      if (!id) return;
+      fetch(`http://192.168.15.18:8080/corretores/${id}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Erro ao carregar registro");
+          return res.json();
+        })
+        .then((data: ICorretor) => setCorretor(data))
+        .catch(err => console.error(err));
+    }, [id]);
 
   useEffect(() => {
     const termo = pesquisa.toLowerCase();
@@ -104,16 +78,7 @@ function SobreCorretor() {
     setClientesFiltrados(filtrado);
   }, [pesquisa, clientes, filtroStatus, filtroTipo, filtroEstado]);
 
-  const [corretor, setCorretor] = useState({
-    status: "ativo",
-    nome: "Gabriel Almeida Ferreira",
-    email: "exemplo@exemplo.com",
-    telefone: "2131323416",
-    cpf: "123.456-78",
-    dataNascimento: "12/12/2021",
-    especialidade: "corretor",
-    dataCadastro: "12/12/2021",
-  });
+  
 
   function handleClose() {
     router.back();
@@ -160,11 +125,11 @@ function SobreCorretor() {
   let txt = "";
 
   function checkStatus() {
-    switch (corretor.status) {
-      case "ativo":
+    switch (corretor?.status) {
+      case "ATIVO":
         txt = "Ativo";
         return styles.ativo;
-      case "inativo":
+      case "INATIVO":
         txt = "Inativo";
         return styles.inativo;
       default:
@@ -180,7 +145,7 @@ function SobreCorretor() {
       {/* Dados do corretor fixos na tela */}
       <View>
         <View style={styles.titulo}>
-          <Title style={styles.sobreClienteNome}>{corretor.nome}</Title>
+          <Title style={styles.sobreClienteNome}>{corretor?.nomeCompleto}</Title>
           <View style={[styles.estado, checkStatus()]}>
             <Texto>{txt}</Texto>
           </View>
@@ -188,26 +153,26 @@ function SobreCorretor() {
 
         <View style={styles.scrollViewContent}>
           <Texto style={styles.sobreClienteLabel}>Email</Texto>
-          <Texto>{corretor.email}</Texto>
+          <Texto>{corretor?.email}</Texto>
 
           <Texto style={styles.sobreClienteLabel}>Telefone</Texto>
-          <Texto>{corretor.telefone}</Texto>
+          <Texto>{corretor?.telefone}</Texto>
 
           <Texto style={styles.sobreClienteLabel}>CPF</Texto>
-          <Texto>{corretor.cpf}</Texto>
+          <Texto>{corretor?.cpf}</Texto>
 
           <Texto style={styles.sobreClienteLabel}>Data de nascimento</Texto>
-          <Texto>{corretor.dataNascimento}</Texto>
+          <Texto>{corretor?.dataNascimento}</Texto>
 
           <Texto style={styles.sobreClienteLabel}>Especialidade</Texto>
-          <Texto>{corretor.especialidade}</Texto>
+          <Texto>{corretor?.especialidade}</Texto>
 
-          <Texto style={styles.sobreClienteLabel}>Data de cadastro</Texto>
-          <Texto>{corretor.dataCadastro}</Texto>
         </View>
       </View>
 
       {/* Lista de clientes rolável */}
+      {corretor?.registros &&
+      <>
       <View style={styles.pesquisa}>
         <HeaderSearch
           valor={pesquisa}
@@ -216,7 +181,6 @@ function SobreCorretor() {
           filtroAtivo={filtroStatus.length > 0}
         />
       </View>
-
       <ScrollView style={styles.scroll}>
         <View style={styles.listaContainer}>
           {clientesFiltrados.map((item, index) => (
@@ -232,6 +196,15 @@ function SobreCorretor() {
           ))}
         </View>
       </ScrollView>
+      </>
+        
+      
+      }
+      
+      
+      
+
+      
       <Modal
         animationType="none"
         transparent={true}

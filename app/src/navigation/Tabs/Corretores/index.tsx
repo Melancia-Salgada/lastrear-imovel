@@ -30,9 +30,7 @@ function Corretores() {
     router.push("/src/screens/Novo");
   }
 
-  const handleCorretorOpen = () => {
-    router.push("/src/screens/SobreCorretor");
-  };
+  
 
   useEffect(() => {
   async function fetchCorretores() {
@@ -110,7 +108,7 @@ function Corretores() {
       <View style={styles.listaContainer}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {corretoresFiltrados.map((corretor, index) => (
-            <Pressable onPress={handleCorretorOpen} key={index}>
+            <Pressable onPress={() => router.push({ pathname: '/src/screens/SobreCorretor', params: { id: corretor.id } })} key={index}>
               <ListinhaCorretor
                 nomeCorretor={corretor.nome}
                 emailCorretor={corretor.email}
