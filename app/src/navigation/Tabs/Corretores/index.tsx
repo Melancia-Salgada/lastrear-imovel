@@ -1,6 +1,6 @@
 import HeaderSearch from "@/app/src/components/HeaderSearch";
 import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Animated,
   Modal,
@@ -13,7 +13,7 @@ import {
 import ListinhaCorretor from "../../../components/ListinhaCorretor";
 import Texto from "@/app/src/components/Texto";
 import Title from "@/app/src/components/Title";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { ICorretorLista } from "@/app/src/interfaces/ICorretorLista";
 
 function Corretores() {
@@ -32,13 +32,15 @@ function Corretores() {
 
   
 
-  useEffect(() => {
+  useFocusEffect(
+  useCallback(() => {
   async function fetchCorretores() {
     try {
-      const resposta = await fetch("http://192.168.15.18:8080/corretores"); // troque pela URL real
+      const resposta = await fetch("http://192.168.15.10:8080/corretores"); // troque pela URL real
       const data = await resposta.json();
 
       const adaptado: ICorretorLista[] = data.map((corretor: any) => ({
+        id: corretor.id || crypto.randomUUID(),
         nome: corretor.nomeCompleto || "Sem nome",
         email: corretor.email || "Sem email",
         status: (corretor.status || "INATIVO").toLowerCase(),
@@ -52,7 +54,9 @@ function Corretores() {
   }
 
   fetchCorretores();
-}, []);
+}, [])
+  )
+  
 
 
   useEffect(() => {

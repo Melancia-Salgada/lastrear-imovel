@@ -52,7 +52,7 @@ async function handleCriar() {
   }
 
   try {
-    const response = await fetch('http://192.168.15.18:8080/corretores', {
+    const response = await fetch('http://192.168.15.10:8080/corretores', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

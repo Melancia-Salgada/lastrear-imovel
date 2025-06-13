@@ -5,6 +5,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,12 +15,18 @@ import {
 } from "react-native";
 import Texto from "../../components/Texto";
 import Title from "../../components/Title";
+import { useRouter } from "expo-router";
 
 
 
 export default function Login() {
   const [senha, setSenha] = useState("");
   const [email, setEmail] = useState("");
+  const router = useRouter();
+
+  function handleEntrar() {
+    router.push('/'); 
+  }
 
   return (
     <KeyboardAvoidingView
@@ -70,10 +77,13 @@ export default function Login() {
             />
           </View>
         </View>
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
+        
+        <Pressable >
+            <TouchableOpacity onPress={handleEntrar} style={styles.button}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
+        </Pressable>
+        
         <View style={styles.forgotPasswordContainer}>
           <Text style={styles.forgotPasswordText}>Esqueceu a senha? </Text>
           <TouchableOpacity

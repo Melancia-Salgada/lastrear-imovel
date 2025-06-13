@@ -8,6 +8,9 @@ import Listinha from "../../components/ListinhaCorretor";
 import { IRegistro } from "../../interfaces/ICliente";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "expo-router/build/hooks";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
+
 
 function SobreCliente() {
   const searchParams = useSearchParams();
@@ -15,19 +18,23 @@ function SobreCliente() {
 
 
   const [registro, setRegistro] = useState<IRegistro | null>(null);
-  const [corretor, setCorretor] = useState({ nome: "Eduardo", email: "eduardo@imobiliaria.com", status: "ativo" });
+  const [corretor, setCorretor] = useState();
   const router = useRouter();
 
-  useEffect(() => {
+  useFocusEffect(
+  useCallback(() => {
     if (!id) return;
-    fetch(`http://192.168.15.18:8080/registros/${id}`)
+    
+    fetch(`http://192.168.15.10:8080/registros/${id}`)
       .then(res => {
         if (!res.ok) throw new Error("Erro ao carregar registro");
         return res.json();
       })
       .then((data: IRegistro) => setRegistro(data))
       .catch(err => console.error(err));
-  }, [id]);
+  }, [id])
+);
+
 
   const handleClienteOpen = () => {
     router.push("/src/screens/SobreCorretor");
@@ -41,10 +48,14 @@ function SobreCliente() {
     if (!registro) return;
 
     const participante1 = registro.participante1;
+    const participante2 = registro.participante2
 
     router.push({
       pathname: "/src/screens/Editar/ClienteEdit",
       params: {
+        status: registro.estadoRegistro,
+        segundoParticipante: String(registro.segundoParticipante),
+        id: id,
         nome: participante1.nome,
         procura: registro.procura,
         tipoImovel: registro.tipo,
@@ -55,7 +66,7 @@ function SobreCliente() {
         telefone1: participante1.telefone1,
         telefone2: participante1.telefone2,
         imposto: participante1.declaraIRPF ? "Sim" : "Não",
-        holerite: participante1.compromissoHolerite ? "Sim" : "Não",
+        holerite: participante1.compromissoHolerite,
         restricao: participante1.restricaoNoNome ? "Sim" : "Não",
         valorRestricao: participante1.valorRestricao,
         tipoRenda: participante1.tipoDeRenda,
@@ -151,7 +162,7 @@ function SobreCliente() {
 
             <View>
               <Texto style={styles.sobreClienteLabel}>Tem compromisso financeiro no holerite?</Texto>
-              <Texto>{registro?.participante1.compromissoHolerite ? "Sim" : "Não"}</Texto>
+              <Texto>{registro?.participante1.compromissoHolerite}</Texto>
             </View>
 
             <View>
@@ -217,9 +228,13 @@ function SobreCliente() {
             </View>
           </View>
           <View style={{ height: 10 }} />
-          <Pressable onPress={handleClienteOpen}>
-            <Listinha nomeCorretor={corretor.nome} emailCorretor={corretor.email} status={corretor.status} />
-          </Pressable>
+          {corretor&&
+            <Pressable onPress={handleClienteOpen}>
+              <Listinha nomeCorretor={corretor.nome} emailCorretor={corretor.email} status={corretor.status} />
+            </Pressable>
+          }
+          
+          
           <View style={{ height: 100 }} />
         </ScrollView>
       </View>

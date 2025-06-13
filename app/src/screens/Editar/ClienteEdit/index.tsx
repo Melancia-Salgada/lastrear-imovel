@@ -14,15 +14,27 @@ import Title from "@/app/src/components/Title";
 import Input from "@/app/src/components/Input";
 import DropdownSimNao from "@/app/src/components/DropdownSimNao";
 import DropdownRenda from "@/app/src/components/DropdownRenda";
+import { Alert } from "react-native";
+import { useSearchParams } from "expo-router/build/hooks";
+import DropdownHolerite from "@/app/src/components/DropDownHolerite";
+import DropdownStatusCliente, { StatusCliente } from "@/app/src/components/DropdownStatusCliente";
 
 function ClienteEdit() {
   const params = useLocalSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const id = searchParams.get('id')?? "";
 
   function normalizeParam(param: string | string[] | undefined): string {
     if (Array.isArray(param)) return param[0];
     return param || "";
   }
+
+  function getParam(param: string | string[] | undefined): string {
+    return Array.isArray(param) ? param[0] : param || "";
+  }
+
 
   const [nomeCompleto, setNomeCompleto] = useState(normalizeParam(params.nome));
   const [procura, setProcura] = useState(normalizeParam(params.procura));
@@ -67,14 +79,97 @@ function ClienteEdit() {
   const [imovelNome, setImovelNome] = useState(
     normalizeParam(params.imovelNome)
   );
+  const [segundoParticipante, setSegundoParticipante] = useState(
+    normalizeParam(params.segundoParticipante)
+  );
+
+  function validarStatusCliente(status: string): StatusCliente | "" {
+  if (
+    status === "ANDAMENTO" ||
+    status === "ABERTO" ||
+    status === "ENCERRADO" ||
+    status === "CONCLUIDO"
+  ) {
+    return status;
+  }
+  return "";
+}
+
+// Uso do hook com validação:
+const [status, setStatus] = useState<StatusCliente | "">(
+  validarStatusCliente(getParam(params.status))
+);
+
+
 
   function handleClose() {
     router.back();
   }
 
-  function handleEditarCliente() {
-    // Aqui você pode implementar a lógica para salvar ou enviar os dados editados
+  async function handleEditarCliente() {
+  if (!nomeCompleto || !procura || !tipoImovel || !email || !telefone1 || !cpf) {
+    Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
+    return;
   }
+
+  function checarVariavel(valor: string) {
+    if (valor === 'Sim') return true
+    if (valor === 'Não') return false
+    return valor
+  }
+
+  const clienteAtualizado = {
+  estadoRegistro: status,
+  procura,
+  tipo: tipoImovel, // Aqui você deve confirmar se `tipoImovel` corresponde ao "tipo" do imóvel.
+  segundoParticipante: segundoParticipante === 'true', // ou true, dependendo do seu caso
+  participante1: {
+    status,
+    nome: nomeCompleto,
+    cpf,
+    email,
+    telefone1,
+    telefone2,
+    dataNascimento: nascimento,
+    estadoCivil,
+    restricaoNoNome: checarVariavel(restricao),
+    valorRestricao: parseFloat(valorRestricao.replace(/[^\d,]/g, "").replace(",", ".")) || 0,
+    tipoDeRenda: tipoRenda.toUpperCase(),
+    umMesDeCarteiraAssinada: checarVariavel(tempoCarteira),
+    rendaBrutaFormal: parseFloat(rendaFormal) || 0,
+    rendaBrutaInformal: parseFloat(rendaInformal) || 0,
+    tresAnosFgts: checarVariavel(anoFgts),
+    vaiUtilizarFgts: checarVariavel(usarFgts),
+    declaraIRPF: checarVariavel(imposto),
+    compromissoHolerite: typeof holerite === 'string'
+    ? holerite.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase()
+    : '',
+    possuiImovelRegistradoNoNome: checarVariavel(imovelNome)
+  }
+};
+
+
+  try {
+    const response = await fetch(`http://192.168.15.10:8080/registros/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(clienteAtualizado),
+    });
+
+    if (response.ok) {
+      Alert.alert("Sucesso", "Cliente atualizado com sucesso!");
+      router.back(); // Volta para a tela anterior
+    } else {
+      const errorData = await response.json();
+      Alert.alert("Erro", errorData?.mensagem || "Erro ao atualizar o cliente.");
+    }
+  } catch (error) {
+    Alert.alert("Erro", "Erro de conexão com o servidor.");
+    console.error("Erro ao editar cliente:", error);
+  }
+}
 
   return (
     <SafeAreaView style={styles.novo}>
@@ -89,8 +184,14 @@ function ClienteEdit() {
           showsVerticalScrollIndicator={false}
         >
           <Title style={styles.txtNovo}>Editar Cliente</Title>
+        
 
           <View style={styles.container}>
+            <DropdownStatusCliente
+            label="Status:"
+            valor={status}
+            onChange={setStatus}
+            />
             <Input
               label="Nome completo: *"
               valor={nomeCompleto}
@@ -158,7 +259,7 @@ function ClienteEdit() {
               onChange={setImposto}
             />
 
-            <DropdownSimNao
+            <DropdownHolerite
               label="Tem compromisso financeiro no holerite?"
               valor={holerite}
               onChange={setHolerite}

@@ -6,16 +6,20 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import { FontAwesome6 } from '@expo/vector-icons'
 import Title from '@/app/src/components/Title'
 import Texto from '@/app/src/components/Texto'
+import { useRouter } from 'expo-router'
 
 function Ajustes() {
+  const router = useRouter();
+
+
+  function handleLogin() {
+    router.push('/src/screens/Login'); 
+  }
+
   return (
     <TemplateNavScreen label=' Ajustes'>
       <View style={styles.container}>
-        <Pressable style={[styles.buttonContainer, styles.cinza]}>
-          <FontAwesome6 name='lock' size={32}/>
-          <Title>Alterar senha</Title>
-        </Pressable>
-        <Pressable style={[styles.buttonContainer, styles.vermelho]}>
+        <Pressable onPress={handleLogin} style={[styles.buttonContainer, styles.vermelho]}>
           <FontAwesome6 name='door-closed'size={32}/>
           <Title>Sair</Title>
         </Pressable>

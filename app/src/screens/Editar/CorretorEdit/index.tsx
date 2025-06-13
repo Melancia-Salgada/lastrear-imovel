@@ -6,12 +6,14 @@ import {
   Platform,
   ScrollView,
   Pressable,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import HeaderMais from "@/app/src/components/HeaderMais";
 import Title from "@/app/src/components/Title";
 import Input from "@/app/src/components/Input";
+import DropdownStatusCorretor, { EstadoCorretor } from "@/app/src/components/DropdownStatusCorretor";
 
 function CorretorEdit() {
   const params = useLocalSearchParams();
@@ -20,6 +22,7 @@ function CorretorEdit() {
     return Array.isArray(param) ? param[0] : param || "";
   }
 
+  const [id, setId] = useState(getParam(params.id));
   const [nomeCompleto, setNomeCompleto] = useState(getParam(params.nome));
   const [email, setEmail] = useState(getParam(params.email));
   const [telefone, setTelefone] = useState(getParam(params.telefone));
@@ -29,13 +32,62 @@ function CorretorEdit() {
     getParam(params.especialidade)
   );
 
+  function validarStatus(status: string): EstadoCorretor | "" {
+  if (status === "ATIVO" || status === "INATIVO") {
+    return status;
+  }
+  return "";
+}
+
+const [status, setStatus] = useState<EstadoCorretor | "">(validarStatus(getParam(params.status)));
+
+
+
   const router = useRouter();
 
   function handleClose() {
     router.back();
   }
 
-  function handleCriar() {}
+  async function handleEditar() {
+  if (!nomeCompleto || !email || !telefone || !cpf) {
+    Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
+    return;
+  }
+
+  const corretorAtualizado = {
+  status,
+  nomeCompleto,   
+  email,
+  telefone,
+  cpf,
+  dataNascimento: nascimento, 
+  especialidade,
+};
+
+
+  try {
+    const response = await fetch(`http://192.168.15.10:8080/corretores/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(corretorAtualizado),
+    });
+
+    if (response.ok) {
+      Alert.alert("Sucesso", "Corretor atualizado com sucesso!");
+      router.back(); // volta para a tela anterior
+    } else {
+      const errorData = await response.json();
+      Alert.alert("Erro", errorData?.mensagem || "Erro ao atualizar o corretor.");
+    }
+  } catch (error) {
+    Alert.alert("Erro", "Erro de conexão com o servidor.");
+    console.error("Erro ao editar corretor:", error);
+  }
+}
+
 
   return (
     <SafeAreaView style={styles.novo}>
@@ -51,6 +103,12 @@ function CorretorEdit() {
         >
           <Title style={styles.txtNovo}>Editar Corretor</Title>
           <View style={styles.container}>
+            <DropdownStatusCorretor
+              label="Status:"
+              valor={status}
+              onChange={setStatus}
+            />
+            
             <Input
               label="Nome completo: *"
               valor={nomeCompleto}
@@ -86,7 +144,7 @@ function CorretorEdit() {
               onChange={setEspecialidade}
             />
           </View>
-          <Pressable style={styles.botao} onPress={handleCriar}>
+          <Pressable style={styles.botao} onPress={handleEditar}>
             <Title style={styles.txtBotao}>Editar</Title>
           </Pressable>
         </ScrollView>

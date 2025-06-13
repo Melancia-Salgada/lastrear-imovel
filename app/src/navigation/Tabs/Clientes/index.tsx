@@ -1,8 +1,12 @@
-import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
+import HeaderSearch from "@/app/src/components/HeaderSearch";
 import Listinha from "@/app/src/components/ListinhaCliente";
+import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
 import Texto from "@/app/src/components/Texto";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import Title from "@/app/src/components/Title";
+import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Animated,
   Modal,
@@ -12,12 +16,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
-import HeaderSearch from "@/app/src/components/HeaderSearch";
-import Title from "@/app/src/components/Title";
-import { useRouter } from "expo-router";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
 
 function Clientes() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +34,7 @@ function Clientes() {
 
   const fetchClientes = async () => {
     try {
-      const response = await fetch("http://192.168.15.18:8080/registros");
+      const response = await fetch("http://192.168.15.10:8080/registros");
       const data = await response.json();
 
       const adaptado: IClienteLista[] = data.map((registro: any) => ({

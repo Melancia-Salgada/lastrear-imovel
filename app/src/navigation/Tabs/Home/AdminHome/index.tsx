@@ -2,8 +2,8 @@ import Listinha from "@/app/src/components/ListinhaCliente";
 import TemplateNavScreen from "@/app/src/components/TemplateNavScreen";
 import Title from "@/app/src/components/Title";
 import { IClienteLista } from "@/app/src/interfaces/IClienteLista";
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 function AdminHome() {
@@ -12,7 +12,7 @@ function AdminHome() {
 
   const fetchClientes = async () => {
     try {
-      const response = await fetch("http://192.168.15.18:8080/registros");
+      const response = await fetch("http://192.168.15.10:8080/registros");
       const data = await response.json();
 
       const adaptado: IClienteLista[] = data.map((registro: any) => ({
@@ -30,9 +30,12 @@ function AdminHome() {
     }
   };
 
-  useEffect(() => {
+  useFocusEffect(
+  useCallback(() => {
     fetchClientes();
-  }, []);
+  }, [])
+);
+
 
   const handleClienteOpen = (id: string) => {
     router.push({ pathname: "/src/screens/SobreCliente", params: { id } });

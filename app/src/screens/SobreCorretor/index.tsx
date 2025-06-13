@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderMais from "../../components/HeaderMais";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import {
   Animated,
   Modal,
@@ -50,16 +50,19 @@ function SobreCorretor() {
     }
   };
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
       if (!id) return;
-      fetch(`http://192.168.15.18:8080/corretores/${id}`)
+      fetch(`http://192.168.15.10:8080/corretores/${id}`)
         .then(res => {
           if (!res.ok) throw new Error("Erro ao carregar registro");
           return res.json();
         })
         .then((data: ICorretor) => setCorretor(data))
         .catch(err => console.error(err));
-    }, [id]);
+    }, [id])
+  )
+  
 
   useEffect(() => {
     const termo = pesquisa.toLowerCase();
@@ -85,10 +88,15 @@ function SobreCorretor() {
   }
 
   function handleClickEdit() {
+
+  if (!corretor) return;
+
   router.push({
     pathname: "/src/screens/Editar/CorretorEdit",
     params: {
-      nome: corretor.nome,
+      status: corretor.status,
+      id: id,
+      nome: corretor.nomeCompleto,
       email: corretor.email,
       telefone: corretor.telefone,
       cpf: corretor.cpf,
